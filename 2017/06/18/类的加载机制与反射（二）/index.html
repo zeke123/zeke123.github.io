@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>类的加载机制与反射（二） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="通过反射查看类的信息Java程序中许多对象在运行时都会出现两种类型：编译时类型和运行时类型例如：Person p = new Student();">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类的加载机制与反射（二）">
+<meta property="og:url" content="http://yoursite.com/2017/06/18/类的加载机制与反射（二）/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="通过反射查看类的信息Java程序中许多对象在运行时都会出现两种类型：编译时类型和运行时类型例如：Person p = new Student();">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-4af36e5d82689460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-c6031e5b5d40f257.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-18T10:35:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="类的加载机制与反射（二）">
+<meta name="twitter:description" content="通过反射查看类的信息Java程序中许多对象在运行时都会出现两种类型：编译时类型和运行时类型例如：Person p = new Student();">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2965516-4af36e5d82689460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-类的加载机制与反射（二）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/18/类的加载机制与反射（二）/" class="article-date">
+  <time datetime="2017-06-18T10:32:52.000Z" itemprop="datePublished">2017-06-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      类的加载机制与反射（二）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="通过反射查看类的信息"><a href="#通过反射查看类的信息" class="headerlink" title="通过反射查看类的信息"></a>通过反射查看类的信息</h2><p>Java程序中许多对象在运行时都会出现两种类型：编译时类型和运行时类型<br>例如：Person p = new Student();<a id="more"></a><br>编译类型为：Person<br>运行类型为：Student</p>
+<p>为了解决这种问题，有两种方式：</p>
+<ul>
+<li>假设在编译时和运行时都完全知道类型的具体信息，在这种情况下，可以先使用instanceof 运算符进行判断</li>
+<li>编译时无法知道对象和类属于那些类，程序只能依靠运行时信息来发现该对象和类的真实信息，这就必须通过反射</li>
+</ul>
+<h4 id="1-获得-Class-对象"><a href="#1-获得-Class-对象" class="headerlink" title="1. 获得 Class 对象"></a>1. 获得 Class 对象</h4><p>java程序中获得 Class 对象有三种方式</p>
+<ul>
+<li>使用Class 类的forName(String clazzName)静方法。必须是完整包名。</li>
+<li>调用某个类的class属性来获取该类的 Class 对象。</li>
+<li>调用某个对象的getClass() 方法。</li>
+</ul>
+<h4 id="2-从-Class-对象中获取信息"><a href="#2-从-Class-对象中获取信息" class="headerlink" title="2. 从 Class 对象中获取信息"></a>2. 从 Class 对象中获取信息</h4><p>具体使用查阅API文档，下面以一个例子来说明</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import java.lang.reflect.Constructor;</div><div class="line">import java.lang.reflect.Method;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/5.</div><div class="line">*/</div><div class="line"></div><div class="line">public class ClassTest &#123;</div><div class="line"></div><div class="line"></div><div class="line">private ClassTest() &#123;</div><div class="line">System.out.println(&quot;执行无参构造函数&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public ClassTest(String name) &#123;</div><div class="line">System.out.println(&quot;执行有参构造函数&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public void method() &#123;</div><div class="line">System.out.println(&quot;执行无参method方法&quot;);</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">public void method(String str) &#123;</div><div class="line">System.out.println(&quot;执行有参method方法&quot;);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line">//获取Class对象</div><div class="line"></div><div class="line">Class&lt;ClassTest&gt; aClass = ClassTest.class;</div><div class="line"></div><div class="line"></div><div class="line">//获取Class对象所对应类的全部构造器</div><div class="line">Constructor&lt;?&gt;[] constructors = aClass.getDeclaredConstructors();</div><div class="line">System.out.println(&quot;ClassTest的全部构造器如下：&quot;);</div><div class="line">for (Constructor&lt;?&gt; constructor : constructors) &#123;</div><div class="line">System.out.println(constructor);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//获取Class对象所对应类的全部public构造器</div><div class="line">Constructor&lt;?&gt;[] cons = aClass.getConstructors();</div><div class="line">System.out.println(&quot;-----------------------------------&quot;);</div><div class="line">System.out.println(&quot;ClassTest的全部public构造器如下：&quot;);</div><div class="line">for (Constructor&lt;?&gt; c : cons) &#123;</div><div class="line">System.out.println(c);</div><div class="line">&#125;</div><div class="line"></div><div class="line">//获取Class对象所对应类的全部public方法</div><div class="line">Method[] methods = aClass.getMethods();</div><div class="line">System.out.println(&quot;-----------------------------------&quot;);</div><div class="line">System.out.println(&quot;ClassTest的全部public方法如下：&quot;);</div><div class="line">for (Method method : methods) &#123;</div><div class="line">System.out.println(method);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//获取Class对象所对应类的指定方法</div><div class="line">try</div><div class="line">&#123;</div><div class="line">Method meth = aClass.getMethod(&quot;method&quot;, String.class);</div><div class="line">System.out.println(&quot;-----------------------------------&quot;);</div><div class="line">System.out.println(&quot;ClassTest里带一个字符串参数的method方法：&quot;+meth);</div><div class="line">&#125; catch (NoSuchMethodException e) &#123;</div><div class="line">e.printStackTrace();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-4af36e5d82689460.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Snip20170405_1.png"></p>
+<h4 id="3-Java8-新增的方法参数反射"><a href="#3-Java8-新增的方法参数反射" class="headerlink" title="3. Java8 新增的方法参数反射"></a>3. Java8 新增的方法参数反射</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import java.lang.reflect.Method;</div><div class="line">import java.lang.reflect.Parameter;</div><div class="line">import java.util.List;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/3.</div><div class="line">*/</div><div class="line"></div><div class="line">public class TextA</div><div class="line">&#123;</div><div class="line"></div><div class="line">public void rep(String string, List&lt;String&gt; list)</div><div class="line">&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">public static void main(String[] args) &#123;</div><div class="line"></div><div class="line">Class&lt;TextA&gt; aClass = TextA.class;</div><div class="line"></div><div class="line"></div><div class="line">try &#123;</div><div class="line">//获取带有两个参数的 rep方法</div><div class="line">Method rep = aClass.getMethod(&quot;rep&quot;, String.class, List.class);</div><div class="line">//获取指定方法参数个数</div><div class="line">int count = rep.getParameterCount();</div><div class="line">System.out.println(&quot;rep方法参数个数：&quot; + count);</div><div class="line"></div><div class="line"></div><div class="line">//获取rep 方法的所有参数信息</div><div class="line">Parameter[] parameters = rep.getParameters();</div><div class="line">int index = 1;</div><div class="line">for (Parameter parameter : parameters) &#123;</div><div class="line">//方法返回该类的class文件中是否包含了方法的形参名信息</div><div class="line">System.out.println(&quot;----第&quot; + index++ + &quot;个参数信息---&quot;);</div><div class="line">System.out.println(&quot;参数名：&quot; + parameter.getName());</div><div class="line">System.out.println(&quot;形参类型：&quot; + parameter.getType());</div><div class="line">System.out.println(&quot;泛型类型：&quot; + parameter.getParameterizedType());</div><div class="line">&#125;</div><div class="line">&#125; catch (NoSuchMethodException e) &#123;</div><div class="line">e.printStackTrace();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-c6031e5b5d40f257.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Snip20170405_3.png"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/06/18/类的加载机制与反射（二）/" data-id="cj42kvktx00011n3n3zkrpzmf" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/18/类的加载机制与反射（一）/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">类的加载机制与反射（一）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/18/类的加载机制与反射（二）/">类的加载机制与反射（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/18/类的加载机制与反射（一）/">类的加载机制与反射（一）</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
