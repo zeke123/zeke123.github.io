@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>类的加载机制与反射（一） | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="类的加载机制与反射（一）">
+<meta property="og:url" content="http://yoursite.com/2017/06/18/类的加载机制与反射（一）/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-9d27fe1f706f7c00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-18T10:21:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="类的加载机制与反射（一）">
+<meta name="twitter:description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2965516-9d27fe1f706f7c00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-类的加载机制与反射（一）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/06/18/类的加载机制与反射（一）/" class="article-date">
+  <time datetime="2017-06-18T10:18:19.000Z" itemprop="datePublished">2017-06-18</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      类的加载机制与反射（一）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="类的加载、连接和初始化"><a href="#类的加载、连接和初始化" class="headerlink" title="类的加载、连接和初始化"></a>类的加载、连接和初始化</h2><h4 id="1-JVM和类"><a href="#1-JVM和类" class="headerlink" title="1.JVM和类"></a>1.JVM和类</h4><p>当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。<a id="more"></a><br>当系统出现以下几种情况时，JVM进程将被终止:<br>(1)程序运行到最后正常结束<br>(2)使用 Systerm.exit()或者 Runtime.getRuntime().exit()<br>(3)执行过程中遇到未捕获的异常或者错误而结束<br>(4)程序所在平台强制结束JVM进程</p>
+<p>例子：<br>A.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">public class A</div><div class="line">&#123;</div><div class="line">//类变量</div><div class="line">public static int a = 5;</div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>AText.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">package com.example;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/3.</div><div class="line">*/</div><div class="line"></div><div class="line">public class AText</div><div class="line">&#123;</div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">A a = new A();</div><div class="line">a.a++;</div><div class="line">//运行结果：6</div><div class="line">System.out.println(a.a);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>BText.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/3.</div><div class="line">*/</div><div class="line"></div><div class="line">public class BText</div><div class="line">&#123;</div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">A b = new A();</div><div class="line">//运行结果：5</div><div class="line">System.out.println(b.a);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>两次运行，处于不同的JVM中，两个JVM之间并不会共享数据</p>
+<h4 id="2-类的加载"><a href="#2-类的加载" class="headerlink" title="2.类的加载"></a>2.类的加载</h4><p>当程序使用某个类时，如果该类该类还未被加载到内存中，则系统会通过加载、连接和初始化这三个步骤来对该类进行初始化。这三个步骤称为类加载或类初始化</p>
+<p>类加载指的是将类的class文件读入内存，并为之创建一个java.lang.Class对象</p>
+<p>类的加载由类加载器完成，类加载器通常由JVM提供</p>
+<p>通过不同的类加载器，可以从不同来源加载类的二进制数据</p>
+<ul>
+<li>从本地系统加载class 文件</li>
+<li>从JAR包加载class文件</li>
+<li>通过网络加载class文件</li>
+<li>把一个java 文件动态编译，并执行加载</li>
+</ul>
+<p>类加载器无需等到使用时才去加载该类，java 虚拟机规范允许系统预先加载某些类</p>
+<h4 id="3-类的连接"><a href="#3-类的连接" class="headerlink" title="3.类的连接"></a>3.类的连接</h4><p>当类被加载之后，系统为之生成一个对应的Class 对象，接着将进入连接阶段，连接阶段负责把二进制数据合并到JRE中。类连接又分为三个阶段</p>
+<ul>
+<li>验证：用于检验被加载的类是否有正确的内部结构，并和其他类协调一致</li>
+<li>准备：类准备阶段负责为类的类变量分配内存，并设置默认初始值</li>
+<li>解析：将类的二进制数据中的符号引用替换成直接引用</li>
+</ul>
+<h4 id="4-类的初始化"><a href="#4-类的初始化" class="headerlink" title="4.类的初始化"></a>4.类的初始化</h4><p>在类的初始化阶段，虚拟机负责对类进行初始化，主要是对类变量初始化。<br>在java类中对变量指定初始值有两种方式：</p>
+<ul>
+<li>声明类变量时指定初始值</li>
+<li>使用静态初始化块为类变量指定初始值</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">package com.example;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/3.</div><div class="line">*/</div><div class="line"></div><div class="line">public class AText</div><div class="line">&#123;</div><div class="line">//声明变量 b时指定初始值</div><div class="line">static int b = 2;</div><div class="line">static</div><div class="line">&#123;</div><div class="line">//使用静态初始化块为变量b指定初始值</div><div class="line">b = 5;</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line"></div><div class="line">A a = new A();</div><div class="line">a.a++;</div><div class="line">System.out.println(a.a);</div><div class="line">System.out.println(AText.b);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="5-类初始化的时机"><a href="#5-类初始化的时机" class="headerlink" title="5.类初始化的时机"></a>5.类初始化的时机</h4><p>当 Java 程序首次通过下面6种方式来使用某个类或者接口，系统就会初始化该类或者接口</p>
+<ul>
+<li>创建类的实例</li>
+<li>调用某个类的方法(静态方法)</li>
+<li>访问某个类或接口的类变量，或者为该类变量赋值</li>
+<li>使用反射的方式来强制创建某个类或者接口对应的 java.lang.Class 对象</li>
+<li>初始化某个类的子类。那么该子类所有父类都会被初始化</li>
+<li>直接使用java.exe 命令来运行某个主类</li>
+</ul>
+<p>对于一个final 型的类变量，如果该类变量在编译的时就可以确定下来，那么这个类变量相当于“宏变量”。java 编译器会在编译时直接把这个类变量出现的地方替换成它的值，因此即使程序使用该静态类变量，也不会导致该类的初始化</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">public class MyTest</div><div class="line">&#123;</div><div class="line"></div><div class="line">static</div><div class="line">&#123;</div><div class="line">//静态初始化块</div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">//变量name可以在编译的时候确定下来，相当于一个常量</div><div class="line">static final String name = &quot;zhoujian&quot;;</div><div class="line"></div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">//不会初始化MyTest类</div><div class="line">System.out.println(MyTest.name);</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当使用ClassLoader 类的loadClass()方法来加载某个类时，该方法只是加载类，并不会执行该类的初始化。</p>
+<p>使用Class的forName()静态方法才会导致强制初始化该类</p>
+<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>类加载器负责将.class 文件加载到内存中，并为之生成对应的java.lang.Class 对象</p>
+<h4 id="1-类加载器简介"><a href="#1-类加载器简介" class="headerlink" title="1. 类加载器简介"></a>1. 类加载器简介</h4><p>类加载器负责加载所有的类，系统为所有被载入内存中的类生成一个java.lang.Class 实例</p>
+<p>当JVM启动时，会形成由三个类加载器组成的初始类加载器层次结构</p>
+<ul>
+<li>Bootstrap ClassLoader：根类加载器</li>
+<li>Extension ClassLoader：扩展类加载器</li>
+<li>System  ClassLoader：系统类加载器</li>
+</ul>
+<p>例子：获取根类加载器所加载的核心类库</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">import java.net.URL;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/4/3.</div><div class="line">*/</div><div class="line"></div><div class="line">public class Text</div><div class="line">&#123;</div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">//获取根类加载器所加载的全部URL数组</div><div class="line">URL[] urls = sun.misc.Launcher.getBootstrapClassPath().getURLs();</div><div class="line">for (int i = 0; i &lt; urls.length; i++)</div><div class="line">&#123;</div><div class="line">//输出根类加载器的全部url</div><div class="line">System.out.println(urls[i].toExternalForm());</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-9d27fe1f706f7c00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="Snip20170404_1.png"></p>
+<p>Extension ClassLoader：扩展类加载器,它负责加载JRE的扩展目录（%JAVA_HOME%jre/lib/ext或者由java.ext.dirs系统属性指定的目录）中JAR包的类</p>
+<p>System  ClassLoader：系统类加载器，可以通过ClassLoader的静态方法 getSystemClassLoader（）来获取系统类加载器</p>
+<h4 id="2-类加载机制"><a href="#2-类加载机制" class="headerlink" title="2. 类加载机制"></a>2. 类加载机制</h4><p>JVM的类加载机制主要要三种：</p>
+<ul>
+<li>全盘负责 ：就是当一个类加载器负责加载某个Class时，该Class所依赖的和引用的其它Class也将由该类加载器负责载入</li>
+<li>父类委托：先让父类加载器试图加载该Class，只有在父类加载器无法加载该类时才尝试从自己的类路径中加载该类</li>
+<li>缓存机制：所有加载过得Class都会被缓存，当程序中需要使用某个Class时，类加载器先从缓存中获取，只要缓存中不存在该Class对象时，系统才会读取对应的二进制数据，并转换成Class对象，存入缓存中。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/06/18/类的加载机制与反射（一）/" data-id="cj42kai2y0000yl3nch8cgtwn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/06/18/Handler源码解析/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Handler源码解析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/06/18/类的加载机制与反射（一）/">类的加载机制与反射（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2017/06/18/Handler源码解析/">Handler源码解析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
