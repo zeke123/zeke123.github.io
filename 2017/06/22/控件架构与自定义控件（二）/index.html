@@ -1,0 +1,818 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="自定义控件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="六 .自定义View在自定义View时，我们通常会去重写onDraw() 方法来绘制View的显示内容。如果该View还需要使用wrap_content属性，那么还必须重写onMeasure() 方法。另外，通过自定义attrs属性，还可以设置新的属性配置值。">
+<meta name="keywords" content="自定义控件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="控件架构与自定义控件（二）">
+<meta property="og:url" content="http://yoursite.com/2017/06/22/控件架构与自定义控件（二）/index.html">
+<meta property="og:site_name" content="周建的博客">
+<meta property="og:description" content="六 .自定义View在自定义View时，我们通常会去重写onDraw() 方法来绘制View的显示内容。如果该View还需要使用wrap_content属性，那么还必须重写onMeasure() 方法。另外，通过自定义attrs属性，还可以设置新的属性配置值。">
+<meta property="og:image" content="http://img.blog.csdn.net/20170613203738187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170614082505756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170614104835355?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-22T08:22:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="控件架构与自定义控件（二）">
+<meta name="twitter:description" content="六 .自定义View在自定义View时，我们通常会去重写onDraw() 方法来绘制View的显示内容。如果该View还需要使用wrap_content属性，那么还必须重写onMeasure() 方法。另外，通过自定义attrs属性，还可以设置新的属性配置值。">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170613203738187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/22/控件架构与自定义控件（二）/"/>
+
+
+
+
+
+  <title>控件架构与自定义控件（二） | 周建的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">周建的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">时间不会辜负每一个平静努力的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/22/控件架构与自定义控件（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周建">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="周建的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">控件架构与自定义控件（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-22T16:18:39+08:00">
+                2017-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-群英传/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 群英传</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="六-自定义View"><a href="#六-自定义View" class="headerlink" title="六 .自定义View"></a>六 .自定义View</h2><p>在自定义View时，我们通常会去重写onDraw() 方法来绘制View的显示内容。如果该View还需要使用wrap_content属性，那么还必须重写onMeasure() 方法。另外，通过自定义attrs属性，还可以设置新的属性配置值。<a id="more"></a></p>
+<p>在View中通常有以下一些比较重要的回调方法</p>
+<ul>
+<li>onFinishInflate(): 从XML 加载组件后回调</li>
+<li>onSizeChanged() : 组件大小改变时回调</li>
+<li>onMeasure() : 回调该方法来进行测量</li>
+<li>onLayout() : 回调该方法来确定显示的位置</li>
+<li>onTouchEvent() : 监听到触摸事件时回调</li>
+</ul>
+<p>当然，创建自定义View的时候，并不需要重写所有的方法，只需要重写特定条件的回调方法即可。</p>
+<p>通常情况下，有三种方法来实现自定义控件</p>
+<ul>
+<li>对现有控件进行扩展</li>
+<li>通过组合来实现新的控件</li>
+<li>重写View来实现全新的控件</li>
+</ul>
+<p>1 对现有控件进行拓展</p>
+<p>这是一个非常重要的自定义View方法，它可以在原生控件的基础上进行拓展，增加新功能、修改显示的UI等。一般来说，我们可以在onDraw() 方法中对原生控件行为进行拓展。</p>
+<p>以TextView为例，来看看如何使用拓展原生控件的方法创建新的控件。比如想让一个TextView的背景更加丰富，给其多绘制几层背景。</p>
+<p>原生的TextView使用onDraw() 方法绘制要显示的文字。当继承了系统的TextView之后，如果不重写其onDraw() 方法，则不会修改TextView的任何效果。可以认为在自定义的TextView中调用TextView类的onDraw() 方法来绘制了显示的文字，代码如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onDraw(Canvas canvas) &#123;</div><div class="line">super.onDraw(canvas);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>程序调用super.onDraw(canvas)方法来实现原生控件的功能，但是在调用super.onDraw(canvas)方法之前和之后，我们都可以实现自己的逻辑，分别在系统绘制文字前后，完成自己的操作。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onDraw(Canvas canvas) &#123;</div><div class="line">//在回调父类方法前，实现自己的逻辑，对TextView来说即是在绘    //制文本内容前</div><div class="line">super.onDraw(canvas);</div><div class="line">//在回调父类方法后，实现自己的逻辑，对TextView来说即是在绘    //制文本内容后</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现自定义TextView</p>
+<p>activity_main.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout</div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;match_parent&quot;</div><div class="line">android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">&lt;kotlindemo.zhoujian.com.customeview.MyTextView</div><div class="line">android:layout_width=&quot;200dp&quot;</div><div class="line">android:layout_height=&quot;50dp&quot;</div><div class="line">android:gravity=&quot;center_horizontal&quot;</div><div class="line">android:text=&quot;Android&quot;</div><div class="line">android:textSize=&quot;30sp&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>MyTextView.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div></pre></td><td class="code"><pre><div class="line">package kotlindemo.zhoujian.com.customeview;</div><div class="line"></div><div class="line">import android.content.Context;</div><div class="line">import android.graphics.Canvas;</div><div class="line">import android.graphics.Color;</div><div class="line">import android.graphics.Paint;</div><div class="line">import android.support.annotation.Nullable;</div><div class="line">import android.support.v7.widget.AppCompatTextView;</div><div class="line">import android.util.AttributeSet;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/6/13.</div><div class="line">*/</div><div class="line"></div><div class="line">public class MyTextView extends AppCompatTextView</div><div class="line">&#123;</div><div class="line"></div><div class="line">private Paint mPaint1;</div><div class="line"></div><div class="line">private Paint mPaint2;</div><div class="line"></div><div class="line"></div><div class="line">public MyTextView(Context context) &#123;</div><div class="line">super(context);</div><div class="line"></div><div class="line">initPaint();</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">public MyTextView(Context context, @Nullable AttributeSet attrs) &#123;</div><div class="line">super(context, attrs);</div><div class="line">initPaint();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public MyTextView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">super(context, attrs, defStyleAttr);</div><div class="line"></div><div class="line">initPaint();</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void initPaint()</div><div class="line">&#123;</div><div class="line"></div><div class="line">mPaint1 = new Paint();</div><div class="line"></div><div class="line">mPaint1.setColor(getResources().getColor(android.R.color.holo_blue_light));</div><div class="line"></div><div class="line">mPaint1.setStyle(Paint.Style.FILL);</div><div class="line"></div><div class="line">mPaint2 = new Paint();</div><div class="line"></div><div class="line">mPaint2.setColor(Color.YELLOW);</div><div class="line"></div><div class="line">mPaint2.setStyle(Paint.Style.FILL);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onDraw(Canvas canvas) &#123;</div><div class="line"></div><div class="line">//绘制外层矩形</div><div class="line">canvas.drawRect(0,0,getMeasuredWidth(),getMeasuredHeight(),mPaint1);</div><div class="line"></div><div class="line">//绘制内层矩形</div><div class="line">canvas.drawRect(10,10,getMeasuredWidth()-10,getMeasuredHeight()-10,mPaint2);</div><div class="line"></div><div class="line">canvas.save();</div><div class="line"></div><div class="line">//绘制文本前平移10像素</div><div class="line">canvas.translate(10,0);</div><div class="line"></div><div class="line">//父类完成的方法，即绘制文本</div><div class="line">super.onDraw(canvas);</div><div class="line">canvas.restore();</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>实现效果：</p>
+<p><img src="http://img.blog.csdn.net/20170613203738187?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>下面看一个稍微复杂的TextView ，利用LinearGradient Shader和Matrix 来实现一个动态的文字闪动的效果，要想实现这一效果，可以利用Android中的Paint对象的Shader渲染器。通过设置一个不断变化的LinearGradient，并使用带有该属性的Paint对象来绘制显示的文字。首先，在onSizedChanged() 方法中进行对象的初始化工作，并根据View的宽带设置一个inearGradient渐变渲染器，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onSizeChanged(int w, int h, int oldw, int oldh) &#123;</div><div class="line">super.onSizeChanged(w, h, oldw, oldh);</div><div class="line"></div><div class="line">if(mViewWidth == 0)&#123;</div><div class="line"></div><div class="line">mViewWidth = getMeasuredWidth();</div><div class="line"></div><div class="line">if(mViewWidth&gt;0)&#123;</div><div class="line"></div><div class="line">mPaint = getPaint();</div><div class="line"></div><div class="line">mLinearGradient = new LinearGradient(</div><div class="line">0,</div><div class="line">0,</div><div class="line">mViewWidth,</div><div class="line">0,</div><div class="line">new int[]&#123;Color.BLUE,0XFFFFFFFF,Color.BLUE&#125;,</div><div class="line">null,</div><div class="line">Shader.TileMode.CLAMP);</div><div class="line"></div><div class="line">mPaint.setShader(mLinearGradient);</div><div class="line">mMatrix = new Matrix();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>其中最关键的就是使用getPint() 方法获取当前绘制TextView的Paint对象设置原生TextView的LinearGradient属性。最后在onDraw() 方法中，通过矩阵的方式来不断平移渐变效果，从而在绘制文字时，产生动态的闪动效果，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onDraw(Canvas canvas) &#123;</div><div class="line">super.onDraw(canvas);</div><div class="line"></div><div class="line">if(mMatrix!=null)</div><div class="line">&#123;</div><div class="line"></div><div class="line">mTranslate += mViewWidth/5;</div><div class="line"></div><div class="line">if (mTranslate &gt; 2 * mViewWidth) &#123;</div><div class="line">mTranslate = -mViewWidth;</div><div class="line">&#125;</div><div class="line"></div><div class="line">mMatrix.setTranslate(mTranslate,0);</div><div class="line"></div><div class="line">mLinearGradient.setLocalMatrix(mMatrix);</div><div class="line"></div><div class="line">postInvalidateDelayed(100);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>完整代码</p>
+<p>activity_main.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout</div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;match_parent&quot;</div><div class="line">android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">&lt;kotlindemo.zhoujian.com.customeview.ShineTextView</div><div class="line">android:layout_width=&quot;300dp&quot;</div><div class="line">android:layout_height=&quot;50dp&quot;</div><div class="line">android:text=&quot;My Android TextView&quot;</div><div class="line">android:textSize=&quot;30sp&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>ShineTextView.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line">package kotlindemo.zhoujian.com.customeview;</div><div class="line"></div><div class="line">import android.content.Context;</div><div class="line">import android.graphics.Canvas;</div><div class="line">import android.graphics.Color;</div><div class="line">import android.graphics.LinearGradient;</div><div class="line">import android.graphics.Paint;</div><div class="line">import android.graphics.Shader;</div><div class="line">import android.support.v7.widget.AppCompatTextView;</div><div class="line">import android.util.AttributeSet;</div><div class="line">import android.graphics.Matrix;</div><div class="line"></div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/6/13.</div><div class="line">*/</div><div class="line"></div><div class="line">public class ShineTextView  extends AppCompatTextView</div><div class="line">&#123;</div><div class="line"></div><div class="line">private int mViewWidth = 0;</div><div class="line"></div><div class="line">private int mTranslate = 0;</div><div class="line"></div><div class="line"></div><div class="line">private Matrix mMatrix;</div><div class="line"></div><div class="line">private Paint mPaint;</div><div class="line"></div><div class="line">private LinearGradient mLinearGradient;</div><div class="line"></div><div class="line">public ShineTextView(Context context) &#123;</div><div class="line">super(context);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public ShineTextView(Context context, AttributeSet attrs) &#123;</div><div class="line">super(context, attrs);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public ShineTextView(Context context, AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">super(context, attrs, defStyleAttr);</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onSizeChanged(int w, int h, int oldw, int oldh) &#123;</div><div class="line">super.onSizeChanged(w, h, oldw, oldh);</div><div class="line"></div><div class="line">if(mViewWidth == 0)&#123;</div><div class="line"></div><div class="line">mViewWidth = getMeasuredWidth();</div><div class="line"></div><div class="line">if(mViewWidth&gt;0)&#123;</div><div class="line"></div><div class="line">mPaint = getPaint();</div><div class="line"></div><div class="line">mLinearGradient = new LinearGradient(</div><div class="line">0,</div><div class="line">0,</div><div class="line">mViewWidth,</div><div class="line">0,</div><div class="line">new int[]&#123;Color.BLUE,0XFFFFFFFF,Color.BLUE&#125;,</div><div class="line">null,</div><div class="line">Shader.TileMode.CLAMP);</div><div class="line"></div><div class="line">mPaint.setShader(mLinearGradient);</div><div class="line">mMatrix = new Matrix();</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onDraw(Canvas canvas) &#123;</div><div class="line">super.onDraw(canvas);</div><div class="line"></div><div class="line">if(mMatrix!=null)</div><div class="line">&#123;</div><div class="line"></div><div class="line">mTranslate += mViewWidth/5;</div><div class="line"></div><div class="line">if (mTranslate &gt; 2 * mViewWidth) &#123;</div><div class="line">mTranslate = -mViewWidth;</div><div class="line">&#125;</div><div class="line"></div><div class="line">mMatrix.setTranslate(mTranslate,0);</div><div class="line"></div><div class="line">mLinearGradient.setLocalMatrix(mMatrix);</div><div class="line"></div><div class="line">postInvalidateDelayed(100);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显示效果：</p>
+<p><img src="http://img.blog.csdn.net/20170614082505756?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>2 创建复合控件</p>
+<p>这种方式通常需要继承一个合适的ViewGroup，再给它添加指定功能的控件，从而组合成新的复合控件。通过这种方式创建的控件，我们一般会给它指定一些可配的属性，让它具有更强的拓展性。下面就以一个CommentTitle为示例</p>
+<p>(1) 自定义属性</p>
+<p>在res资源目录的values目录下创建一个attrs.xml 的属性定义文件，并在文件中通过以下代码定义相应的属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;resources&gt;</div><div class="line"></div><div class="line">&lt;declare-styleable name=&quot;CommentTitle&quot;&gt;</div><div class="line"></div><div class="line">&lt;attr name=&quot;title&quot; format=&quot;string&quot; /&gt;</div><div class="line">&lt;attr name=&quot;titleTextSize&quot; format=&quot;dimension&quot; /&gt;</div><div class="line">&lt;attr name=&quot;titleTextColor&quot; format=&quot;color&quot; /&gt;</div><div class="line">&lt;attr name=&quot;leftTextColor&quot; format=&quot;color&quot; /&gt;</div><div class="line">&lt;attr name=&quot;leftBackground&quot; format=&quot;reference|color&quot; /&gt;</div><div class="line">&lt;attr name=&quot;leftText&quot; format=&quot;string&quot; /&gt;</div><div class="line">&lt;attr name=&quot;rightTextColor&quot; format=&quot;color&quot; /&gt;</div><div class="line">&lt;attr name=&quot;rightBackground&quot; format=&quot;reference|color&quot; /&gt;</div><div class="line">&lt;attr name=&quot;rightText&quot; format=&quot;string&quot; /&gt;</div><div class="line"></div><div class="line">&lt;/declare-styleable&gt;</div><div class="line"></div><div class="line">&lt;/resources&gt;</div></pre></td></tr></table></figure>
+<p>我们在代码中通过  declare-styleable 标签声明了使用自定义属性，并通过name 属性来确定引用的名称。左后通过 attr 标签来声明具体的自定义属性，比如在这里定义看标题文字的字体、大小、颜色等，并通过format 属性来指定属性的类型。这里需要注意的是，有些属性可以是颜色属性，也可以是引用属性。比如按钮的背景，可以把它指定为具体颜色，也可以把它指定为一张图片，搜索一使用 “ | ”来分隔不同的属性。</p>
+<p>在确定好属性后，就可以创建一个自定义控件-CommentTitle，并让它继承自ViewGroup，从而组合一些需要的控件。这里为了简单，我们继承自RelativeLayout 。在构造方法中，通过以下代码获取自定义属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.CommentTitle);</div></pre></td></tr></table></figure>
+<p>系统提供了TypedArray 这样的数据结构来获取自定义属性集，后面引用的styleable的CommentTitle，就是我们在xml中通过declare-styleable name=”CommentTitle” 所指定的name 名。接下来通过TypedArray对象的getString()、getColor() 等方法，就可以获取这些定义的属性值，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">// 通过这个方法，将你在atts.xml中定义的declare-styleable</div><div class="line">// 的所有属性的值存储到TypedArray中</div><div class="line">TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.CommentTitle);</div><div class="line"></div><div class="line">// 从TypedArray中取出对应的值来为要设置的属性赋值</div><div class="line"></div><div class="line">mLeftTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_leftTextColor, 0);</div><div class="line">mLeftBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_leftBackground);</div><div class="line">mLeftText = ta.getString(R.styleable.CommentTitle_leftText);</div><div class="line"></div><div class="line">mRightTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_rightTextColor, 0);</div><div class="line">mRightBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_rightBackground);</div><div class="line">mRightText = ta.getString(R.styleable.CommentTitle_rightText);</div><div class="line"></div><div class="line">mTitleTextSize = ta.getDimension(</div><div class="line">R.styleable.CommentTitle_titleTextSize, 10);</div><div class="line">mTitleTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_titleTextColor, 0);</div><div class="line">mTitle = ta.getString(R.styleable.CommentTitle_title);</div><div class="line"></div><div class="line">// 获取完TypedArray的值后，一般要调用</div><div class="line">// recyle方法来避免重新创建的时候的错误</div><div class="line"></div><div class="line">ta.recycle();</div></pre></td></tr></table></figure>
+<p>这里需要注意的是，当获取所有的属性值后，需要调用TypedArray的recycle()方法来完成资源的回收</p>
+<p>(2) 组合控件</p>
+<p>接下来，就可以开始组合控件了。CommentTitle实际上由三个控价组成，即左边的点击按钮 mLeftButton，右边的点击按钮 mRightButton和中间的标题mTitleView。通过动态添加控件的方式，使用addView() 方法将这三个控件加入到自定义的CommentTitle中，并给它们设置我们前面所获取的具体的属性值，代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">mLeftButton = new Button(context);</div><div class="line">mRightButton = new Button(context);</div><div class="line">mTitleView = new TextView(context);</div><div class="line"></div><div class="line"></div><div class="line">// 为创建的组件元素赋值</div><div class="line">// 值就来源于我们在引用的xml文件中给对应属性的赋值</div><div class="line"></div><div class="line"></div><div class="line">mLeftButton.setTextColor(mLeftTextColor);</div><div class="line">mLeftButton.setBackground(mLeftBackground);</div><div class="line">mLeftButton.setText(mLeftText);</div><div class="line"></div><div class="line">mRightButton.setTextColor(mRightTextColor);</div><div class="line">mRightButton.setBackground(mRightBackground);</div><div class="line">mRightButton.setText(mRightText);</div><div class="line"></div><div class="line">mTitleView.setText(mTitle);</div><div class="line">mTitleView.setTextColor(mTitleTextColor);</div><div class="line">mTitleView.setTextSize(mTitleTextSize);</div><div class="line">mTitleView.setGravity(Gravity.CENTER);</div><div class="line"></div><div class="line"></div><div class="line">// 为组件元素设置相应的布局元素</div><div class="line">mLeftParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, TRUE);</div><div class="line">// 添加到ViewGroup</div><div class="line">addView(mLeftButton, mLeftParams);</div><div class="line"></div><div class="line">mRightParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, TRUE);</div><div class="line">addView(mRightButton, mRightParams);</div><div class="line"></div><div class="line">mTitlepParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mTitlepParams.addRule(RelativeLayout.CENTER_IN_PARENT, TRUE);</div><div class="line">addView(mTitleView, mTitlepParams);</div></pre></td></tr></table></figure>
+<p>那么如何来给两个按钮设计点击事件呢？ 这就用到接口回调的思想，将具体的实现逻辑交给调用者，实现过程如下</p>
+<p>定义接口：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">//定义接口，具体调用由调用者实现</div><div class="line"></div><div class="line">public interface CommentTitleClickListener&#123;</div><div class="line"></div><div class="line">//左边按钮点击事件</div><div class="line">void leftClick();</div><div class="line">//右边按钮点击事件</div><div class="line">void rightClick();</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>暴露接口给调用者</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">// 按钮的点击事件，不需要具体的实现，</div><div class="line">// 只需调用接口的方法，回调的时候，会有具体的实现</div><div class="line">mRightButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.rightClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">mLeftButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.leftClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">// 暴露一个方法给调用者来注册接口回调</div><div class="line">// 通过接口来获得回调者对接口方法的实现</div><div class="line">public void setOnCommentTitleClickListener(CommentTitleClickListener mListener) &#123;</div><div class="line">this.mListener = mListener;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了能动态控制按钮的显示和隐藏，可以使用公共方法来实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* 设置按钮的显示与否 通过id区分按钮，flag区分是否显示</div><div class="line">*</div><div class="line">* @param id   id</div><div class="line">* @param flag 是否显示</div><div class="line">*/</div><div class="line">public void setButtonVisable(int id, boolean flag) &#123;</div><div class="line">if (flag) &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.VISIBLE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.VISIBLE);</div><div class="line">&#125;</div><div class="line">&#125; else &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.GONE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.GONE);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>最后给出完整的代码</p>
+<p>CommentTitle.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div></pre></td><td class="code"><pre><div class="line">package kotlindemo.zhoujian.com.customeview;</div><div class="line"></div><div class="line">import android.content.Context;</div><div class="line">import android.content.res.TypedArray;</div><div class="line">import android.graphics.drawable.Drawable;</div><div class="line">import android.util.AttributeSet;</div><div class="line">import android.view.Gravity;</div><div class="line">import android.view.View;</div><div class="line">import android.widget.Button;</div><div class="line">import android.widget.RelativeLayout;</div><div class="line">import android.widget.TextView;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/6/14.</div><div class="line">*/</div><div class="line"></div><div class="line">public class CommentTitle extends RelativeLayout &#123;</div><div class="line"></div><div class="line"></div><div class="line">// CommentTitle：左按钮、右按钮、标题</div><div class="line">private Button mLeftButton;</div><div class="line">private Button mRightButton;</div><div class="line">private TextView mTitleView;</div><div class="line"></div><div class="line"></div><div class="line">// 布局属性，用来控制组件元素在ViewGroup中的位置</div><div class="line">private LayoutParams mLeftParams, mTitlepParams, mRightParams;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">// 左按钮的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private int mLeftTextColor;</div><div class="line">private Drawable mLeftBackground;</div><div class="line">private String mLeftText;</div><div class="line">// 右按钮的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private int mRightTextColor;</div><div class="line">private Drawable mRightBackground;</div><div class="line">private String mRightText;</div><div class="line">// 标题的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private float mTitleTextSize;</div><div class="line">private int mTitleTextColor;</div><div class="line">private String mTitle;</div><div class="line"></div><div class="line">// 映射传入的接口对象</div><div class="line">private CommentTitleClickListener mListener;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">public CommentTitle(Context context) &#123;</div><div class="line">super(context);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public CommentTitle(Context context, AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">super(context, attrs, defStyleAttr);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public CommentTitle(Context context, AttributeSet attrs) &#123;</div><div class="line">super(context, attrs);</div><div class="line"></div><div class="line">//设置CommentTitle的背景色</div><div class="line">setBackgroundColor(0xFFF59563);</div><div class="line"></div><div class="line"></div><div class="line">// 通过这个方法，将你在atts.xml中定义的declare-styleable</div><div class="line">// 的所有属性的值存储到TypedArray中</div><div class="line">TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.CommentTitle);</div><div class="line"></div><div class="line">// 从TypedArray中取出对应的值来为要设置的属性赋值</div><div class="line"></div><div class="line">mLeftTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_leftTextColor, 0);</div><div class="line">mLeftBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_leftBackground);</div><div class="line">mLeftText = ta.getString(R.styleable.CommentTitle_leftText);</div><div class="line"></div><div class="line">mRightTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_rightTextColor, 0);</div><div class="line">mRightBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_rightBackground);</div><div class="line">mRightText = ta.getString(R.styleable.CommentTitle_rightText);</div><div class="line"></div><div class="line">mTitleTextSize = ta.getDimension(</div><div class="line">R.styleable.CommentTitle_titleTextSize, 10);</div><div class="line">mTitleTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_titleTextColor, 0);</div><div class="line">mTitle = ta.getString(R.styleable.CommentTitle_title);</div><div class="line"></div><div class="line">// 获取完TypedArray的值后，一般要调用</div><div class="line">// recyle方法来避免重新创建的时候的错误</div><div class="line"></div><div class="line">ta.recycle();</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">mLeftButton = new Button(context);</div><div class="line">mRightButton = new Button(context);</div><div class="line">mTitleView = new TextView(context);</div><div class="line"></div><div class="line"></div><div class="line">// 为创建的组件元素赋值</div><div class="line">// 值就来源于我们在引用的xml文件中给对应属性的赋值</div><div class="line"></div><div class="line"></div><div class="line">mLeftButton.setTextColor(mLeftTextColor);</div><div class="line">mLeftButton.setBackground(mLeftBackground);</div><div class="line">mLeftButton.setText(mLeftText);</div><div class="line"></div><div class="line">mRightButton.setTextColor(mRightTextColor);</div><div class="line">mRightButton.setBackground(mRightBackground);</div><div class="line">mRightButton.setText(mRightText);</div><div class="line"></div><div class="line">mTitleView.setText(mTitle);</div><div class="line">mTitleView.setTextColor(mTitleTextColor);</div><div class="line">mTitleView.setTextSize(mTitleTextSize);</div><div class="line">mTitleView.setGravity(Gravity.CENTER);</div><div class="line"></div><div class="line"></div><div class="line">// 为组件元素设置相应的布局元素</div><div class="line">mLeftParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, TRUE);</div><div class="line">// 添加到ViewGroup</div><div class="line">addView(mLeftButton, mLeftParams);</div><div class="line"></div><div class="line">mRightParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, TRUE);</div><div class="line">addView(mRightButton, mRightParams);</div><div class="line"></div><div class="line">mTitlepParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mTitlepParams.addRule(RelativeLayout.CENTER_IN_PARENT, TRUE);</div><div class="line">addView(mTitleView, mTitlepParams);</div><div class="line"></div><div class="line"></div><div class="line">// 按钮的点击事件，不需要具体的实现，</div><div class="line">// 只需调用接口的方法，回调的时候，会有具体的实现</div><div class="line">mRightButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.rightClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">mLeftButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.leftClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//定义接口，具体调用由调用者实现</div><div class="line"></div><div class="line">public interface CommentTitleClickListener&#123;</div><div class="line"></div><div class="line">//左边按钮点击事件</div><div class="line">void leftClick();</div><div class="line">//右边按钮点击事件</div><div class="line">void rightClick();</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 暴露一个方法给调用者来注册接口回调</div><div class="line">// 通过接口来获得回调者对接口方法的实现</div><div class="line">public void setOnCommentTitleClickListener(CommentTitleClickListener mListener) &#123;</div><div class="line">this.mListener = mListener;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line">* 设置按钮的显示与否 通过id区分按钮，flag区分是否显示</div><div class="line">*</div><div class="line">* @param id   id</div><div class="line">* @param flag 是否显示</div><div class="line">*/</div><div class="line">public void setButtonVisable(int id, boolean flag) &#123;</div><div class="line">if (flag) &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.VISIBLE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.VISIBLE);</div><div class="line">&#125;</div><div class="line">&#125; else &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.GONE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.GONE);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在布局文件中，引入命名空间</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">//custom：可以随便定义</div><div class="line">xmlns:custom=&quot;http://schemas.android.com/apk/res-auto&quot;</div></pre></td></tr></table></figure>
+<p>activity_main.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">&lt;RelativeLayout</div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">xmlns:custom=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">xmlns:tools=&quot;http://schemas.android.com/tools&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;match_parent&quot;</div><div class="line">tools:context=&quot;.MainActivity&quot;&gt;</div><div class="line"></div><div class="line">&lt;!--  custom:leftBackground=&quot;@drawable/blue_button&quot;</div><div class="line">custom:rightBackground=&quot;@drawable/blue_button&quot;--&gt;</div><div class="line">&lt;kotlindemo.zhoujian.com.customeview.CommentTitle</div><div class="line">android:id=&quot;@+id/commentTitle&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;40dp&quot;</div><div class="line">custom:leftText=&quot;返回&quot;</div><div class="line">custom:leftTextColor=&quot;#FFFFFF&quot;</div><div class="line">custom:rightText=&quot;更多&quot;</div><div class="line">custom:rightTextColor=&quot;#FFFFFF&quot;</div><div class="line">custom:title=&quot;自定义标题&quot;</div><div class="line">custom:titleTextColor=&quot;#FFFFFF&quot;</div><div class="line">custom:titleTextSize=&quot;5sp&quot;/&gt;</div><div class="line"></div><div class="line">&lt;/RelativeLayout&gt;</div></pre></td></tr></table></figure>
+<p>MainActivity.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div></pre></td><td class="code"><pre><div class="line">package kotlindemo.zhoujian.com.customeview;</div><div class="line"></div><div class="line">import android.app.Activity;</div><div class="line">import android.os.Bundle;</div><div class="line">import android.widget.Toast;</div><div class="line"></div><div class="line">public class MainActivity extends Activity &#123;</div><div class="line"></div><div class="line">private CommentTitle mCommentTitle;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">super.onCreate(savedInstanceState);</div><div class="line">setContentView(R.layout.activity_main);</div><div class="line"></div><div class="line"></div><div class="line">// 获得我们创建的topbar</div><div class="line">mCommentTitle = (CommentTitle) findViewById(R.id.commentTitle);</div><div class="line">// 为topbar注册监听事件，传入定义的接口</div><div class="line">// 并以匿名类的方式实现接口内的方法</div><div class="line">mCommentTitle.setOnCommentTitleClickListener(</div><div class="line">new CommentTitle.CommentTitleClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void rightClick() &#123;</div><div class="line">Toast.makeText(MainActivity.this,</div><div class="line">&quot;right&quot;, Toast.LENGTH_SHORT)</div><div class="line">.show();</div><div class="line">&#125;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void leftClick() &#123;</div><div class="line">Toast.makeText(MainActivity.this,</div><div class="line">&quot;left&quot;, Toast.LENGTH_SHORT)</div><div class="line">.show();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line">// 控制topbar上组件的状态</div><div class="line">mCommentTitle.setButtonVisable(0, true);</div><div class="line">mCommentTitle.setButtonVisable(0, true);</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>CommentTitle.java</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div></pre></td><td class="code"><pre><div class="line">package kotlindemo.zhoujian.com.customeview;</div><div class="line"></div><div class="line">import android.content.Context;</div><div class="line">import android.content.res.TypedArray;</div><div class="line">import android.graphics.Color;</div><div class="line">import android.graphics.drawable.Drawable;</div><div class="line">import android.util.AttributeSet;</div><div class="line">import android.view.Gravity;</div><div class="line">import android.view.View;</div><div class="line">import android.widget.Button;</div><div class="line">import android.widget.RelativeLayout;</div><div class="line">import android.widget.TextView;</div><div class="line"></div><div class="line">/**</div><div class="line">* Created by zhoujian on 2017/6/14.</div><div class="line">*/</div><div class="line"></div><div class="line">public class CommentTitle extends RelativeLayout &#123;</div><div class="line"></div><div class="line"></div><div class="line">// CommentTitle：左按钮、右按钮、标题</div><div class="line">private Button mLeftButton;</div><div class="line">private Button mRightButton;</div><div class="line">private TextView mTitleView;</div><div class="line"></div><div class="line"></div><div class="line">// 布局属性，用来控制组件元素在ViewGroup中的位置</div><div class="line">private LayoutParams mLeftParams, mTitlepParams, mRightParams;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">// 左按钮的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private int mLeftTextColor;</div><div class="line">private Drawable mLeftBackground;</div><div class="line">private String mLeftText;</div><div class="line">// 右按钮的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private int mRightTextColor;</div><div class="line">private Drawable mRightBackground;</div><div class="line">private String mRightText;</div><div class="line">// 标题的属性值，即我们在atts.xml文件中定义的属性</div><div class="line">private float mTitleTextSize;</div><div class="line">private int mTitleTextColor;</div><div class="line">private String mTitle;</div><div class="line"></div><div class="line">// 映射传入的接口对象</div><div class="line">private CommentTitleClickListener mListener;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">public CommentTitle(Context context) &#123;</div><div class="line">super(context);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public CommentTitle(Context context, AttributeSet attrs, int defStyleAttr) &#123;</div><div class="line">super(context, attrs, defStyleAttr);</div><div class="line">&#125;</div><div class="line"></div><div class="line">public CommentTitle(Context context, AttributeSet attrs) &#123;</div><div class="line">super(context, attrs);</div><div class="line"></div><div class="line">//设置CommentTitle的背景色</div><div class="line"></div><div class="line">setBackgroundColor(Color.parseColor(&quot;#3EC5FF&quot;));</div><div class="line"></div><div class="line"></div><div class="line">// 通过这个方法，将你在atts.xml中定义的declare-styleable</div><div class="line">// 的所有属性的值存储到TypedArray中</div><div class="line">TypedArray ta = context.obtainStyledAttributes(attrs,R.styleable.CommentTitle);</div><div class="line"></div><div class="line">// 从TypedArray中取出对应的值来为要设置的属性赋值</div><div class="line"></div><div class="line">mLeftTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_leftTextColor, 0);</div><div class="line">mLeftBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_leftBackground);</div><div class="line">mLeftText = ta.getString(R.styleable.CommentTitle_leftText);</div><div class="line"></div><div class="line">mRightTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_rightTextColor, 0);</div><div class="line">mRightBackground = ta.getDrawable(</div><div class="line">R.styleable.CommentTitle_rightBackground);</div><div class="line">mRightText = ta.getString(R.styleable.CommentTitle_rightText);</div><div class="line"></div><div class="line">mTitleTextSize = ta.getDimension(</div><div class="line">R.styleable.CommentTitle_titleTextSize, 10);</div><div class="line">mTitleTextColor = ta.getColor(</div><div class="line">R.styleable.CommentTitle_titleTextColor, 0);</div><div class="line">mTitle = ta.getString(R.styleable.CommentTitle_title);</div><div class="line"></div><div class="line">// 获取完TypedArray的值后，一般要调用</div><div class="line">// recyle方法来避免重新创建的时候的错误</div><div class="line"></div><div class="line">ta.recycle();</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">mLeftButton = new Button(context);</div><div class="line">mRightButton = new Button(context);</div><div class="line">mTitleView = new TextView(context);</div><div class="line"></div><div class="line"></div><div class="line">// 为创建的组件元素赋值</div><div class="line">// 值就来源于我们在引用的xml文件中给对应属性的赋值</div><div class="line"></div><div class="line"></div><div class="line">mLeftButton.setTextColor(mLeftTextColor);</div><div class="line">mLeftButton.setBackground(mLeftBackground);</div><div class="line">mLeftButton.setText(mLeftText);</div><div class="line"></div><div class="line">mRightButton.setTextColor(mRightTextColor);</div><div class="line">mRightButton.setBackground(mRightBackground);</div><div class="line">mRightButton.setText(mRightText);</div><div class="line"></div><div class="line">mTitleView.setText(mTitle);</div><div class="line">mTitleView.setTextColor(mTitleTextColor);</div><div class="line">mTitleView.setTextSize(mTitleTextSize);</div><div class="line">mTitleView.setGravity(Gravity.CENTER);</div><div class="line"></div><div class="line"></div><div class="line">// 为组件元素设置相应的布局元素</div><div class="line">mLeftParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mLeftParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, TRUE);</div><div class="line">// 添加到ViewGroup</div><div class="line">addView(mLeftButton, mLeftParams);</div><div class="line"></div><div class="line">mRightParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mRightParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, TRUE);</div><div class="line">addView(mRightButton, mRightParams);</div><div class="line"></div><div class="line">mTitlepParams = new LayoutParams(</div><div class="line">LayoutParams.WRAP_CONTENT,</div><div class="line">LayoutParams.MATCH_PARENT);</div><div class="line">mTitlepParams.addRule(RelativeLayout.CENTER_IN_PARENT, TRUE);</div><div class="line">addView(mTitleView, mTitlepParams);</div><div class="line"></div><div class="line"></div><div class="line">// 按钮的点击事件，不需要具体的实现，</div><div class="line">// 只需调用接口的方法，回调的时候，会有具体的实现</div><div class="line">mRightButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.rightClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line">mLeftButton.setOnClickListener(new OnClickListener() &#123;</div><div class="line"></div><div class="line">@Override</div><div class="line">public void onClick(View v) &#123;</div><div class="line">mListener.leftClick();</div><div class="line">&#125;</div><div class="line">&#125;);</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">//定义接口，具体调用由调用者实现</div><div class="line"></div><div class="line">public interface CommentTitleClickListener&#123;</div><div class="line"></div><div class="line">//左边按钮点击事件</div><div class="line">void leftClick();</div><div class="line">//右边按钮点击事件</div><div class="line">void rightClick();</div><div class="line">&#125;</div><div class="line"></div><div class="line">// 暴露一个方法给调用者来注册接口回调</div><div class="line">// 通过接口来获得回调者对接口方法的实现</div><div class="line">public void setOnCommentTitleClickListener(CommentTitleClickListener mListener) &#123;</div><div class="line">this.mListener = mListener;</div><div class="line">&#125;</div><div class="line"></div><div class="line">/**</div><div class="line">* 设置按钮的显示与否 通过id区分按钮，flag区分是否显示</div><div class="line">*</div><div class="line">* @param id   id</div><div class="line">* @param flag 是否显示</div><div class="line">*/</div><div class="line">public void setButtonVisable(int id, boolean flag) &#123;</div><div class="line">if (flag) &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.VISIBLE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.VISIBLE);</div><div class="line">&#125;</div><div class="line">&#125; else &#123;</div><div class="line">if (id == 0) &#123;</div><div class="line">mLeftButton.setVisibility(View.GONE);</div><div class="line">&#125; else &#123;</div><div class="line">mRightButton.setVisibility(View.GONE);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显示效果：</p>
+<p><img src="http://img.blog.csdn.net/20170614104835355?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205020" target="_blank" rel="external">Android 控件架构与自定义控件(一)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205426" target="_blank" rel="external">Android 控件架构与自定义控件(二)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205720" target="_blank" rel="external">Android 控件架构与自定义控件(三)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73368519" target="_blank" rel="external">Android 控件架构与自定义控件(四)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/自定义控件/" rel="tag"># 自定义控件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/22/控件架构与自定义控件（一）/" rel="next" title="控件架构与自定义控件（一）">
+                <i class="fa fa-chevron-left"></i> 控件架构与自定义控件（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="周建" />
+          <p class="site-author-name" itemprop="name">周建</p>
+           
+              <p class="site-description motion-element" itemprop="description">时间不会辜负每一个平静努力的人</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#六-自定义View"><span class="nav-number">1.</span> <span class="nav-text">六 .自定义View</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">周建</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
