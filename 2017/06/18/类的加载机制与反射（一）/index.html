@@ -93,18 +93,18 @@
 
 
 
-<meta name="description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta name="description" content="欢迎来到周建的博客: 共同致力于技术分享与交流  有志者事竟成，破釜沉舟，百二秦关终属楚；苦心人天不负，卧薪尝胆，三千越甲可吞吴。">
 <meta name="keywords" content="Java基础">
 <meta property="og:type" content="article">
 <meta property="og:title" content="类的加载机制与反射（一）">
 <meta property="og:url" content="http://yoursite.com/2017/06/18/类的加载机制与反射（一）/index.html">
 <meta property="og:site_name" content="周建的博客">
-<meta property="og:description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta property="og:description" content="欢迎来到周建的博客: 共同致力于技术分享与交流  有志者事竟成，破釜沉舟，百二秦关终属楚；苦心人天不负，卧薪尝胆，三千越甲可吞吴。">
 <meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-9d27fe1f706f7c00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2017-06-22T02:54:50.000Z">
+<meta property="og:updated_time" content="2017-06-22T09:25:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="类的加载机制与反射（一）">
-<meta name="twitter:description" content="类的加载、连接和初始化1.JVM和类当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。">
+<meta name="twitter:description" content="欢迎来到周建的博客: 共同致力于技术分享与交流  有志者事竟成，破釜沉舟，百二秦关终属楚；苦心人天不负，卧薪尝胆，三千越甲可吞吴。">
 <meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2965516-9d27fe1f706f7c00.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -364,7 +364,19 @@
       
 
       
-        <h2 id="类的加载、连接和初始化"><a href="#类的加载、连接和初始化" class="headerlink" title="类的加载、连接和初始化"></a>类的加载、连接和初始化</h2><h4 id="1-JVM和类"><a href="#1-JVM和类" class="headerlink" title="1.JVM和类"></a>1.JVM和类</h4><p>当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。<a id="more"></a><br>当系统出现以下几种情况时，JVM进程将被终止:<br>(1)程序运行到最后正常结束<br>(2)使用 Systerm.exit()或者 Runtime.getRuntime().exit()<br>(3)执行过程中遇到未捕获的异常或者错误而结束<br>(4)程序所在平台强制结束JVM进程</p>
+        <center><font color="grey"><strong>欢迎来到周建的博客: 共同致力于技术分享与交流</strong></font></center>
+
+<center><font color="grey"><strong>有志者事竟成，破釜沉舟，百二秦关终属楚；苦心人天不负，卧薪尝胆，三千越甲可吞吴。</strong></font></center>
+
+
+
+
+
+
+
+
+<a id="more"></a>
+<h2 id="类的加载、连接和初始化"><a href="#类的加载、连接和初始化" class="headerlink" title="类的加载、连接和初始化"></a>类的加载、连接和初始化</h2><h4 id="1-JVM和类"><a href="#1-JVM和类" class="headerlink" title="1.JVM和类"></a>1.JVM和类</h4><p>当调用java命令运行某个java程序时，该命令会启动一个java虚拟机进程，不管该Java程序有多么复杂，该程序启动了多少个线程，它们都处于该java虚拟机进程里。<br>当系统出现以下几种情况时，JVM进程将被终止:<br>(1)程序运行到最后正常结束<br>(2)使用 Systerm.exit()或者 Runtime.getRuntime().exit()<br>(3)执行过程中遇到未捕获的异常或者错误而结束<br>(4)程序所在平台强制结束JVM进程</p>
 <p>例子：<br>A.java</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">package com.example;</div><div class="line"></div><div class="line">public class A</div><div class="line">&#123;</div><div class="line">//类变量</div><div class="line">public static int a = 5;</div><div class="line">public static void main(String[] args)</div><div class="line">&#123;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>AText.java</p>
