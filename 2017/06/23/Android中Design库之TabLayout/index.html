@@ -1,0 +1,860 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Material Design," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="keywords" content="Material Design">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android中Design库之TabLayout">
+<meta property="og:url" content="http://yoursite.com/2017/06/23/Android中Design库之TabLayout/index.html">
+<meta property="og:site_name" content="周建的博客">
+<meta property="og:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-3e5acb63a228bb37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-367ae6ab791b5174.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-402f442ea6ffaa8b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-72fc0a1606102f7d.gif?imageMogr2/auto-orient/strip">
+<meta property="og:updated_time" content="2017-06-23T08:14:53.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android中Design库之TabLayout">
+<meta name="twitter:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2965516-3e5acb63a228bb37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/23/Android中Design库之TabLayout/"/>
+
+
+
+
+
+  <title>Android中Design库之TabLayout | 周建的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">周建的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">时间不会辜负每一个平静努力的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/23/Android中Design库之TabLayout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周建">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="周建的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android中Design库之TabLayout</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-23T16:14:04+08:00">
+                2017-06-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-5-0/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 5.0</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><font color="gray" size="4"><strong>时间不会辜负每一个平静努力的人！</strong></font></center><br><center><font color="gray" size="4"><strong>欢迎来到周建的博客: 共同致力于技术分享与交流</strong></font></center>
+
+<a id="more"></a>
+<hr>
+<p>##简介</p>
+<p>TabLayout就是用一个水平的布局用来展示Tabs</p>
+<p>##使用</p>
+<p>首先在build.gradle的dependencies中加入依赖</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile &apos;com.android.support:design:25.0.0&apos;</div></pre></td></tr></table></figure>
+<p>给application重新指定theme</p>
+<p>android:theme=”@style/MyTheme”</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;style name=&quot;MyTheme&quot; parent=&quot;Theme.AppCompat.Light.NoActionBar&quot;&gt;</div><div class="line">&lt;/style&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;manifest xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">package=&quot;com.zhoujian.tablayout&quot; &gt;</div><div class="line"></div><div class="line">&lt;application</div><div class="line">android:allowBackup=&quot;true&quot;</div><div class="line">android:icon=&quot;@mipmap/ic_launcher&quot;</div><div class="line">android:label=&quot;@string/app_name&quot;</div><div class="line">android:roundIcon=&quot;@mipmap/ic_launcher_round&quot;</div><div class="line">android:supportsRtl=&quot;true&quot;</div><div class="line">android:theme=&quot;@style/MyTheme&quot; &gt;</div><div class="line">&lt;activity android:name=&quot;.MainActivity&quot; &gt;</div><div class="line">&lt;intent-filter&gt;</div><div class="line">&lt;action android:name=&quot;android.intent.action.MAIN&quot; /&gt;</div><div class="line"></div><div class="line">&lt;category android:name=&quot;android.intent.category.LAUNCHER&quot; /&gt;</div><div class="line">&lt;/intent-filter&gt;</div><div class="line">&lt;/activity&gt;</div><div class="line">&lt;/application&gt;</div><div class="line"></div><div class="line">&lt;/manifest&gt;</div></pre></td></tr></table></figure>
+<p>布局文件中</p>
+<p>默认情况下，没有设置任何属性</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&lt;android.support.design.widget.TabLayout</div><div class="line">android:id=&quot;@+id/tabLayout&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;wrap_content&quot;/&gt;</div></pre></td></tr></table></figure>
+<p>在代码中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">package com.zhoujian.tablayout;</div><div class="line"></div><div class="line">import android.os.Bundle;</div><div class="line">import android.support.design.widget.TabLayout;</div><div class="line">import android.support.v7.app.AppCompatActivity;</div><div class="line"></div><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">public static final String[] titles = new String[]&#123;&quot;精选&quot;,&quot;训练&quot;,&quot;饮食&quot;,&quot;商城&quot;&#125;;</div><div class="line"></div><div class="line">private TabLayout mTabLayout;</div><div class="line"></div><div class="line">@Override</div><div class="line">protected void onCreate(Bundle savedInstanceState) &#123;</div><div class="line">super.onCreate(savedInstanceState);</div><div class="line">setContentView(R.layout.activity_main);</div><div class="line">initView();</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void initView()</div><div class="line">&#123;</div><div class="line">mTabLayout = (TabLayout) findViewById(R.id.tabLayout);</div><div class="line">mTabLayout.addTab(mTabLayout.newTab().setText(titles[0]));</div><div class="line">mTabLayout.addTab(mTabLayout.newTab().setText(titles[1]));</div><div class="line">mTabLayout.addTab(mTabLayout.newTab().setText(titles[2]));</div><div class="line">mTabLayout.addTab(mTabLayout.newTab().setText(titles[3]));</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>显示效果</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-3e5acb63a228bb37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="a.png"></p>
+<p>###改变选中字体的颜色和未选中字体的颜色</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout</div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;match_parent&quot;</div><div class="line">android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">&lt;android.support.design.widget.TabLayout</div><div class="line">android:id=&quot;@+id/tabLayout&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;wrap_content&quot;</div><div class="line">app:tabTextColor=&quot;@color/black&quot;</div><div class="line">app:tabSelectedTextColor=&quot;@color/red&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
+<p>未选中的颜色:黑色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app:tabTextColor=&quot;@color/black&quot;</div></pre></td></tr></table></figure></p>
+<p>选中的颜色:红色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app:tabSelectedTextColor=&quot;@color/red&quot;</div></pre></td></tr></table></figure></p>
+<p>显示效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-367ae6ab791b5174.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="b.png"></p>
+<p>###改变指示器下标横线的高度和颜色、改变TabLayout的背景色</p>
+<p>改变指示器下标的颜色：黑色<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app:tabIndicatorColor=&quot;@color/black&quot;</div></pre></td></tr></table></figure></p>
+<p>改变指示器下标的高度：2dp<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app:tabIndicatorHeight=&quot;2dp&quot;</div></pre></td></tr></table></figure></p>
+<p>改变TabLayout的背景色：黄色</p>
+<p>显示效果：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-402f442ea6ffaa8b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="c.png"></p>
+<p>###改变TabLayout内部字体大小<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">app:tabTextAppearance=&quot;@style/TabLayoutTextStyle&quot;</div><div class="line"></div><div class="line">```  </div><div class="line"></div><div class="line">styles.xml文件中</div></pre></td></tr></table></figure></p>
+<style name="TabLayoutTextStyle">
+<item name="android:textSize">10sp</item>
+</style>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">显示效果：</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">![e.png](http://upload-images.jianshu.io/upload_images/2965516-aa47668a6e455e59.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</div><div class="line"></div><div class="line"></div><div class="line">###添加图标</div></pre></td></tr></table></figure>
+<p>mTabLayout.addTab(mTabLayout.newTab().setText(titles[0]).setIcon(R.mipmap.circle1));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[1]).setIcon(R.mipmap.circle2));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[2]).setIcon(R.mipmap.circle3));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[3]).setIcon(R.mipmap.circle4));<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">显示效果:</div><div class="line"></div><div class="line">![f.png](http://upload-images.jianshu.io/upload_images/2965516-ded8eafad69a4195.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)</div><div class="line"></div><div class="line"></div><div class="line">###显示模式</div><div class="line"></div><div class="line">填充模式</div></pre></td></tr></table></figure></p>
+<p>app:tabGravity=”fill”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">居中模式</div></pre></td></tr></table></figure></p>
+<p>app:tabGravity=”center”<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">###点击事件</div></pre></td></tr></table></figure></p>
+<p>mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {<br>@Override<br>public void onTabSelected(TabLayout.Tab tab) {<br>//选中  </p>
+<p>}</p>
+<p>@Override<br>public void onTabUnselected(TabLayout.Tab tab) {<br>//未选中<br>}</p>
+<p>@Override<br>public void onTabReselected(TabLayout.Tab tab)<br>{<br>//再次选中  </p>
+<p>}<br>});<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">###ViewPager联动</div><div class="line"></div><div class="line"></div><div class="line">activity_main.xml</div></pre></td></tr></table></figure></p>
+<p>&lt;?xml version=”1.0” encoding=”utf-8”?&gt;</p>
+<a href="LinearLayout
+xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+android:layout_width=&quot;match_parent&quot;
+android:layout_height=&quot;match_parent&quot;
+android:orientation=&quot;vertical&quot;">LinearLayout
+xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+android:layout_width=&quot;match_parent&quot;
+android:layout_height=&quot;match_parent&quot;
+android:orientation=&quot;vertical&quot;</a><br><br><br><a href="&#x6d;&#x61;&#105;&#108;&#x74;&#111;&#58;&#x61;&#110;&#x64;&#114;&#x6f;&#105;&#100;&#46;&#115;&#x75;&#112;&#x70;&#111;&#x72;&#116;&#x2e;&#x64;&#x65;&#x73;&#105;&#x67;&#110;&#46;&#119;&#x69;&#100;&#103;&#101;&#x74;&#46;&#84;&#x61;&#98;&#x4c;&#x61;&#121;&#x6f;&#117;&#116;&#xa;&#x61;&#x6e;&#100;&#114;&#x6f;&#x69;&#x64;&#x3a;&#105;&#100;&#61;&#x22;&#x40;&#43;&#105;&#100;&#x2f;&#116;&#97;&#98;&#76;&#97;&#121;&#111;&#x75;&#116;&#x22;&#10;&#97;&#110;&#x64;&#114;&#111;&#105;&#100;&#58;&#x6c;&#97;&#x79;&#x6f;&#x75;&#116;&#x5f;&#119;&#105;&#100;&#116;&#104;&#x3d;&#x22;&#109;&#97;&#116;&#x63;&#x68;&#x5f;&#x70;&#x61;&#114;&#101;&#x6e;&#116;&#x22;&#10;&#x61;&#110;&#x64;&#x72;&#111;&#105;&#100;&#58;&#x6c;&#x61;&#x79;&#111;&#x75;&#116;&#95;&#104;&#101;&#105;&#103;&#104;&#x74;&#x3d;&#x22;&#x77;&#114;&#97;&#112;&#x5f;&#99;&#x6f;&#110;&#116;&#101;&#110;&#x74;&#34;&#10;&#x61;&#x70;&#112;&#x3a;&#x74;&#97;&#98;&#x42;&#x61;&#99;&#x6b;&#103;&#x72;&#x6f;&#x75;&#110;&#x64;&#x3d;&#x22;&#64;&#99;&#x6f;&#x6c;&#x6f;&#x72;&#47;&#x79;&#101;&#108;&#x6c;&#111;&#119;&#x22;&#10;&#x61;&#112;&#x70;&#58;&#x74;&#97;&#x62;&#71;&#114;&#97;&#118;&#105;&#x74;&#121;&#x3d;&#34;&#x66;&#105;&#108;&#x6c;&#x22;&#xa;&#x61;&#x70;&#112;&#58;&#116;&#97;&#98;&#73;&#x6e;&#100;&#x69;&#x63;&#x61;&#x74;&#111;&#114;&#67;&#x6f;&#108;&#111;&#114;&#61;&#34;&#64;&#x63;&#x6f;&#x6c;&#x6f;&#114;&#x2f;&#x62;&#x6c;&#x61;&#99;&#107;&#34;&#xa;&#x61;&#112;&#112;&#58;&#116;&#97;&#x62;&#73;&#x6e;&#x64;&#105;&#x63;&#97;&#116;&#x6f;&#x72;&#x48;&#101;&#x69;&#x67;&#x68;&#x74;&#61;&#x22;&#50;&#100;&#x70;&#34;&#xa;&#x61;&#112;&#x70;&#58;&#x74;&#97;&#x62;&#83;&#x65;&#x6c;&#101;&#x63;&#116;&#x65;&#100;&#x54;&#x65;&#x78;&#116;&#67;&#111;&#x6c;&#111;&#x72;&#x3d;&#34;&#x40;&#99;&#111;&#x6c;&#x6f;&#114;&#x2f;&#114;&#101;&#100;&#x22;&#10;&#97;&#x70;&#x70;&#x3a;&#116;&#x61;&#x62;&#x54;&#x65;&#x78;&#x74;&#65;&#112;&#x70;&#101;&#97;&#x72;&#97;&#x6e;&#99;&#101;&#61;&#x22;&#x40;&#x73;&#x74;&#121;&#x6c;&#101;&#x2f;&#x54;&#97;&#98;&#x4c;&#97;&#x79;&#111;&#x75;&#x74;&#84;&#101;&#120;&#x74;&#83;&#116;&#121;&#x6c;&#101;&#x22;&#10;&#97;&#112;&#112;&#58;&#116;&#97;&#x62;&#84;&#101;&#120;&#116;&#x43;&#111;&#x6c;&#x6f;&#114;&#x3d;&#x22;&#64;&#99;&#111;&#x6c;&#111;&#x72;&#47;&#x62;&#x6c;&#x61;&#x63;&#107;&#x22;&#47;">&#x61;&#110;&#x64;&#114;&#x6f;&#105;&#100;&#46;&#115;&#x75;&#112;&#x70;&#111;&#x72;&#116;&#x2e;&#x64;&#x65;&#x73;&#105;&#x67;&#110;&#46;&#119;&#x69;&#100;&#103;&#101;&#x74;&#46;&#84;&#x61;&#98;&#x4c;&#x61;&#121;&#x6f;&#117;&#116;&#xa;&#x61;&#x6e;&#100;&#114;&#x6f;&#x69;&#x64;&#x3a;&#105;&#100;&#61;&#x22;&#x40;&#43;&#105;&#100;&#x2f;&#116;&#97;&#98;&#76;&#97;&#121;&#111;&#x75;&#116;&#x22;&#10;&#97;&#110;&#x64;&#114;&#111;&#105;&#100;&#58;&#x6c;&#97;&#x79;&#x6f;&#x75;&#116;&#x5f;&#119;&#105;&#100;&#116;&#104;&#x3d;&#x22;&#109;&#97;&#116;&#x63;&#x68;&#x5f;&#x70;&#x61;&#114;&#101;&#x6e;&#116;&#x22;&#10;&#x61;&#110;&#x64;&#x72;&#111;&#105;&#100;&#58;&#x6c;&#x61;&#x79;&#111;&#x75;&#116;&#95;&#104;&#101;&#105;&#103;&#104;&#x74;&#x3d;&#x22;&#x77;&#114;&#97;&#112;&#x5f;&#99;&#x6f;&#110;&#116;&#101;&#110;&#x74;&#34;&#10;&#x61;&#x70;&#112;&#x3a;&#x74;&#97;&#98;&#x42;&#x61;&#99;&#x6b;&#103;&#x72;&#x6f;&#x75;&#110;&#x64;&#x3d;&#x22;&#64;&#99;&#x6f;&#x6c;&#x6f;&#x72;&#47;&#x79;&#101;&#108;&#x6c;&#111;&#119;&#x22;&#10;&#x61;&#112;&#x70;&#58;&#x74;&#97;&#x62;&#71;&#114;&#97;&#118;&#105;&#x74;&#121;&#x3d;&#34;&#x66;&#105;&#108;&#x6c;&#x22;&#xa;&#x61;&#x70;&#112;&#58;&#116;&#97;&#98;&#73;&#x6e;&#100;&#x69;&#x63;&#x61;&#x74;&#111;&#114;&#67;&#x6f;&#108;&#111;&#114;&#61;&#34;&#64;&#x63;&#x6f;&#x6c;&#x6f;&#114;&#x2f;&#x62;&#x6c;&#x61;&#99;&#107;&#34;&#xa;&#x61;&#112;&#112;&#58;&#116;&#97;&#x62;&#73;&#x6e;&#x64;&#105;&#x63;&#97;&#116;&#x6f;&#x72;&#x48;&#101;&#x69;&#x67;&#x68;&#x74;&#61;&#x22;&#50;&#100;&#x70;&#34;&#xa;&#x61;&#112;&#x70;&#58;&#x74;&#97;&#x62;&#83;&#x65;&#x6c;&#101;&#x63;&#116;&#x65;&#100;&#x54;&#x65;&#x78;&#116;&#67;&#111;&#x6c;&#111;&#x72;&#x3d;&#34;&#x40;&#99;&#111;&#x6c;&#x6f;&#114;&#x2f;&#114;&#101;&#100;&#x22;&#10;&#97;&#x70;&#x70;&#x3a;&#116;&#x61;&#x62;&#x54;&#x65;&#x78;&#x74;&#65;&#112;&#x70;&#101;&#97;&#x72;&#97;&#x6e;&#99;&#101;&#61;&#x22;&#x40;&#x73;&#x74;&#121;&#x6c;&#101;&#x2f;&#x54;&#97;&#98;&#x4c;&#97;&#x79;&#111;&#x75;&#x74;&#84;&#101;&#120;&#x74;&#83;&#116;&#121;&#x6c;&#101;&#x22;&#10;&#97;&#112;&#112;&#58;&#116;&#97;&#x62;&#84;&#101;&#120;&#116;&#x43;&#111;&#x6c;&#x6f;&#114;&#x3d;&#x22;&#64;&#99;&#111;&#x6c;&#111;&#x72;&#47;&#x62;&#x6c;&#x61;&#x63;&#107;&#x22;&#47;</a><br><br><br><a href="&#109;&#97;&#x69;&#x6c;&#116;&#x6f;&#x3a;&#x61;&#110;&#100;&#114;&#111;&#x69;&#x64;&#46;&#115;&#x75;&#112;&#112;&#x6f;&#x72;&#x74;&#46;&#118;&#52;&#x2e;&#118;&#105;&#101;&#119;&#x2e;&#86;&#105;&#101;&#119;&#80;&#97;&#x67;&#101;&#x72;&#xa;&#97;&#x6e;&#x64;&#114;&#111;&#x69;&#x64;&#58;&#105;&#100;&#x3d;&#34;&#64;&#x2b;&#105;&#100;&#x2f;&#x76;&#105;&#101;&#x77;&#95;&#112;&#x61;&#x67;&#x65;&#x72;&#34;&#10;&#97;&#x6e;&#x64;&#114;&#x6f;&#x69;&#x64;&#58;&#x6c;&#97;&#x79;&#x6f;&#x75;&#116;&#95;&#119;&#105;&#x64;&#116;&#104;&#x3d;&#34;&#x6d;&#97;&#116;&#x63;&#104;&#95;&#x70;&#x61;&#x72;&#x65;&#x6e;&#116;&#34;&#xa;&#x61;&#x6e;&#100;&#114;&#x6f;&#x69;&#100;&#x3a;&#x6c;&#97;&#121;&#111;&#117;&#x74;&#x5f;&#x68;&#101;&#105;&#103;&#x68;&#116;&#x3d;&#34;&#x6d;&#97;&#116;&#99;&#104;&#95;&#x70;&#x61;&#x72;&#101;&#x6e;&#116;&#34;&#x2f;">&#x61;&#110;&#100;&#114;&#111;&#x69;&#x64;&#46;&#115;&#x75;&#112;&#112;&#x6f;&#x72;&#x74;&#46;&#118;&#52;&#x2e;&#118;&#105;&#101;&#119;&#x2e;&#86;&#105;&#101;&#119;&#80;&#97;&#x67;&#101;&#x72;&#xa;&#97;&#x6e;&#x64;&#114;&#111;&#x69;&#x64;&#58;&#105;&#100;&#x3d;&#34;&#64;&#x2b;&#105;&#100;&#x2f;&#x76;&#105;&#101;&#x77;&#95;&#112;&#x61;&#x67;&#x65;&#x72;&#34;&#10;&#97;&#x6e;&#x64;&#114;&#x6f;&#x69;&#x64;&#58;&#x6c;&#97;&#x79;&#x6f;&#x75;&#116;&#95;&#119;&#105;&#x64;&#116;&#104;&#x3d;&#34;&#x6d;&#97;&#116;&#x63;&#104;&#95;&#x70;&#x61;&#x72;&#x65;&#x6e;&#116;&#34;&#xa;&#x61;&#x6e;&#100;&#114;&#x6f;&#x69;&#100;&#x3a;&#x6c;&#97;&#121;&#111;&#117;&#x74;&#x5f;&#x68;&#101;&#105;&#103;&#x68;&#116;&#x3d;&#34;&#x6d;&#97;&#116;&#99;&#104;&#95;&#x70;&#x61;&#x72;&#101;&#x6e;&#116;&#34;&#x2f;</a><br><br><br>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">MainActivity.java</div></pre></td></tr></table></figure>
+<p>package com.zhoujian.tablayout;</p>
+<p>import android.os.Bundle;<br>import android.support.design.widget.TabLayout;<br>import android.support.v4.app.Fragment;<br>import android.support.v4.view.ViewPager;<br>import android.support.v7.app.AppCompatActivity;</p>
+<p>import java.util.ArrayList;<br>import java.util.Arrays;</p>
+<p>public class MainActivity extends AppCompatActivity {</p>
+<p>public static final String[] titles = new String[]{“精选”,”训练”,”饮食”,”商城”};<br>private ArrayList<fragment> fragmentList = new ArrayList<fragment>();<br>private  TabLayout mTabLayout;<br>private ViewPager mViewPager;</fragment></fragment></p>
+<p>@Override<br>protected void onCreate(Bundle savedInstanceState) {<br>super.onCreate(savedInstanceState);<br>setContentView(R.layout.activity_main);<br>initView();<br>}</p>
+<p>private void initView() {<br>mTabLayout = (TabLayout) findViewById(R.id.tabLayout);</p>
+<p>mViewPager = (ViewPager) findViewById(R.id.view_pager);<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[0]));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[1]));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[2]));<br>mTabLayout.addTab(mTabLayout.newTab().setText(titles[3]));</p>
+<p>mTabLayout.setupWithViewPager(mViewPager);</p>
+<p>fragmentList.add(FirstFragment.newInstance());<br>fragmentList.add(SecondFragment.newInstance());<br>fragmentList.add(ThirdFragment.newInstance());<br>fragmentList.add(FourthFragment.newInstance());</p>
+<p>FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(),fragmentList, Arrays.asList(titles));<br>mViewPager.setAdapter(adapter);<br>mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()<br>{<br>@Override<br>public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)<br>{</p>
+<p>}<br>@Override<br>public void onPageSelected(int position)<br>{<br>}<br>@Override<br>public void onPageScrollStateChanged(int state)<br>{</p>
+<p>}<br>});</p>
+<p>}<br>}</p>
+<p>```</p>
+<p>显示效果</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-72fc0a1606102f7d.gif?imageMogr2/auto-orient/strip" alt="g.gif"></p>
+<p>###源码下载：</p>
+<p><a href="https://github.com/zeke123/TabLayout" target="_blank" rel="external">源码下载：https://github.com/zeke123/TabLayout</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Material-Design/" rel="tag"># Material Design</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/23/Android导航控件之Toolbar/" rel="next" title="Android导航控件之Toolbar">
+                <i class="fa fa-chevron-left"></i> Android导航控件之Toolbar
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/23/Android中Design库之TextInputLayout、TextInputEditText/" rel="prev" title="Android中Design库之TextInputLayout、TextInputEditText">
+                Android中Design库之TextInputLayout、TextInputEditText <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="周建" />
+          <p class="site-author-name" itemprop="name">周建</p>
+           
+              <p class="site-description motion-element" itemprop="description">Give so much time to improving yourself that you won’t have time to criticize others.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zeke123" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/002601150b0b" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u014005316" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://juejin.im/user/5740329671cfe4006c391e1d" target="_blank" title="掘金">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  掘金
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">周建</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访问客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
