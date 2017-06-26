@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Material Design," />
+  <meta name="keywords" content="自定义控件," />
 
 
 
@@ -94,18 +94,19 @@
 
 
 <meta name="description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
-<meta name="keywords" content="Material Design">
+<meta name="keywords" content="自定义控件">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Android中Design库之TextInputLayout、TextInputEditText">
-<meta property="og:url" content="http://yoursite.com/2017/06/23/Android中Design库之TextInputLayout、TextInputEditText/index.html">
+<meta property="og:title" content="Android性能优化（一）">
+<meta property="og:url" content="http://yoursite.com/2017/06/26/Android性能优化（一）/index.html">
 <meta property="og:site_name" content="周建的博客">
 <meta property="og:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
-<meta property="og:image" content="http://img.blog.csdn.net/20170311160156811?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
-<meta property="og:updated_time" content="2017-06-23T08:17:38.000Z">
+<meta property="og:image" content="http://img.blog.csdn.net/20170619154019012?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170619154254216?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-26T02:49:45.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Android中Design库之TextInputLayout、TextInputEditText">
+<meta name="twitter:title" content="Android性能优化（一）">
 <meta name="twitter:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
-<meta name="twitter:image" content="http://img.blog.csdn.net/20170311160156811?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170619154019012?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
 
 
 
@@ -133,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/06/23/Android中Design库之TextInputLayout、TextInputEditText/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/06/26/Android性能优化（一）/"/>
 
 
 
 
 
-  <title>Android中Design库之TextInputLayout、TextInputEditText | 周建的博客</title>
+  <title>Android性能优化（一） | 周建的博客</title>
   
 
 
@@ -278,7 +279,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/23/Android中Design库之TextInputLayout、TextInputEditText/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/26/Android性能优化（一）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="周建">
@@ -295,7 +296,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Android中Design库之TextInputLayout、TextInputEditText</h1>
+          <h1 class="post-title" itemprop="name headline">Android性能优化（一）</h1>
         
 
         <div class="post-meta">
@@ -307,8 +308,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-23T16:16:55+08:00">
-                2017-06-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-26T10:48:19+08:00">
+                2017-06-26
               </time>
             
 
@@ -330,8 +331,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Android-5-0/" itemprop="url" rel="index">
-                    <span itemprop="name">Android 5.0</span>
+                  <a href="/categories/Android-群英传/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 群英传</span>
                   </a>
                 </span>
 
@@ -373,12 +374,17 @@
 
 <a id="more"></a>
 <hr>
-<p>首先上一张效果图:</p>
-<p><img src="http://img.blog.csdn.net/20170311160156811?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
-<p>布局文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</div><div class="line">&lt;LinearLayout</div><div class="line">xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</div><div class="line">xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;match_parent&quot;</div><div class="line">android:orientation=&quot;vertical&quot;&gt;</div><div class="line"></div><div class="line">&lt;android.support.design.widget.TextInputLayout</div><div class="line">android:id=&quot;@+id/text_phone_layout&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;wrap_content&quot;</div><div class="line">android:layout_marginTop=&quot;50dp&quot;</div><div class="line">android:paddingLeft=&quot;15dp&quot;</div><div class="line">android:paddingRight=&quot;15dp&quot;</div><div class="line">android:textColorHint=&quot;@color/buttoncolor&quot;</div><div class="line">app:counterEnabled=&quot;true&quot;</div><div class="line">app:counterMaxLength=&quot;11&quot;</div><div class="line">app:counterTextAppearance=&quot;@style/MyStyle&quot;</div><div class="line">app:counterOverflowTextAppearance=&quot;@style/MyOverStyle&quot;&gt;</div><div class="line"></div><div class="line">&lt;android.support.design.widget.TextInputEditText</div><div class="line">android:id=&quot;@+id/text_phone&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;40dp&quot;</div><div class="line">android:textSize=&quot;15sp&quot;</div><div class="line">android:hint=&quot;手机号码&quot;</div><div class="line">android:inputType=&quot;number&quot;</div><div class="line">android:textColor=&quot;@color/buttoncolor&quot;/&gt;</div><div class="line"></div><div class="line">&lt;/android.support.design.widget.TextInputLayout&gt;</div><div class="line"></div><div class="line">&lt;android.support.design.widget.TextInputLayout</div><div class="line">android:id=&quot;@+id/text_password_layout&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;wrap_content&quot;</div><div class="line">android:layout_marginTop=&quot;40dp&quot;</div><div class="line">android:paddingLeft=&quot;15dp&quot;</div><div class="line">android:paddingRight=&quot;15dp&quot;</div><div class="line">android:textColorHint=&quot;@color/buttoncolor&quot;</div><div class="line">app:passwordToggleDrawable=&quot;@mipmap/eye&quot;</div><div class="line">app:passwordToggleEnabled=&quot;true&quot;</div><div class="line">app:passwordToggleTint=&quot;@color/buttoncolor&quot;</div><div class="line">app:counterEnabled=&quot;true&quot;</div><div class="line">app:counterMaxLength=&quot;6&quot;</div><div class="line">app:counterTextAppearance=&quot;@style/MyStyle&quot;</div><div class="line">app:counterOverflowTextAppearance=&quot;@style/MyOverStyle&quot;&gt;</div><div class="line">&lt;android.support.design.widget.TextInputEditText</div><div class="line">android:id=&quot;@+id/text_password&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;wrap_content&quot;</div><div class="line">android:hint=&quot;密码&quot;</div><div class="line">android:textSize=&quot;15sp&quot;</div><div class="line">android:inputType=&quot;textPassword&quot;</div><div class="line">android:singleLine=&quot;true&quot;</div><div class="line">android:textColor=&quot;@color/buttoncolor&quot;/&gt;</div><div class="line">&lt;/android.support.design.widget.TextInputLayout&gt;</div><div class="line"></div><div class="line">&lt;Button</div><div class="line">android:id=&quot;@+id/login&quot;</div><div class="line">android:layout_width=&quot;match_parent&quot;</div><div class="line">android:layout_height=&quot;35dp&quot;</div><div class="line">android:layout_marginLeft=&quot;15dp&quot;</div><div class="line">android:layout_marginRight=&quot;15dp&quot;</div><div class="line">android:layout_marginTop=&quot;50dp&quot;</div><div class="line">android:background=&quot;@color/buttoncolor&quot;</div><div class="line">android:text=&quot;登录&quot;</div><div class="line">android:textColor=&quot;@color/textColor&quot;/&gt;</div><div class="line">&lt;/LinearLayout&gt;</div></pre></td></tr></table></figure>
-<p>###源码下载</p>
-<p><a href="https://github.com/zeke123/TextInputLayout" target="_blank" rel="external">源码下载：https://github.com/zeke123/TextInputLayout</a></p>
+<h2 id="1-布局优化"><a href="#1-布局优化" class="headerlink" title="1.布局优化"></a>1.布局优化</h2><h4 id="1-Android-UI-渲染机制"><a href="#1-Android-UI-渲染机制" class="headerlink" title="(1) Android UI 渲染机制"></a>(1) Android UI 渲染机制</h4><p>在Android中，系统通过VSYNC 信号触发对 UI 的渲染，其时间间隔为16ms 。这个16ms 就是1000ms 中显示60帧画面的单位时间，即1000/60 ，如果系统每次的渲染时间都保持在16 ms 之内，那么我们看见的UI界面将是非常流畅的，但这也需要将所有程序的逻辑都保持在16ms 内。</p>
+<h4 id="2-避免过度绘制"><a href="#2-避免过度绘制" class="headerlink" title="(2) 避免过度绘制"></a>(2) 避免过度绘制</h4><p>过渡绘制会浪费很多的CPU资源，例如系统默认会绘制Activity的背景，如果再给布局绘制了重贴的背景，那么默认Activity的背景就属于无效的过渡绘制。</p>
+<h4 id="3-优化布局层级"><a href="#3-优化布局层级" class="headerlink" title="(3) 优化布局层级"></a>(3) 优化布局层级</h4><p>在Android中，系统对View进行测量，布局和绘制时，都是通过对View树的遍历来进行操作的。如果一个View树的高度太高，就会严重影响测量、布局和绘制的速度，因此优化布局的第一个方法就是降低View树的高度。</p>
+<p>在早期版本Android中，默认采用线性布局作为XML文件的根布局<br>在现在的版本中，Google已经使用了相对布局来替代线性布局作为默认的根布局。因为通过扁平的相对布局来降低通过线性布局嵌套所产生布局树的高度，从而提高UI渲染的效率。</p>
+<h4 id="4-避免嵌套过多无用布局"><a href="#4-避免嵌套过多无用布局" class="headerlink" title="(4) 避免嵌套过多无用布局"></a>(4) 避免嵌套过多无用布局</h4><p>使用 include 标签重用 Layout<br>使用 ViewStup 实现View 的延时加载<br>使用merge 标签减少布局层次</p>
+<h4 id="5-使用Hierarchy-Viewer-观察布局层次"><a href="#5-使用Hierarchy-Viewer-观察布局层次" class="headerlink" title="(5) 使用Hierarchy Viewer 观察布局层次"></a>(5) 使用Hierarchy Viewer 观察布局层次</h4><p>这个工具位于sdk/tools/hierarchyviewer.bat</p>
+<p>在Android Studio中如何打开这个工具</p>
+<p>工具栏 Tools -&gt; Android -&gt; Android Device Monitor</p>
+<p><img src="http://img.blog.csdn.net/20170619154019012?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>选择 Hierarchy Viewer 即可！ 点击应用报名应用报名，查看布局层次。</p>
+<p><img src="http://img.blog.csdn.net/20170619154254216?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
 
       
     </div>
@@ -408,7 +414,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Material-Design/" rel="tag"># Material Design</a>
+            <a href="/tags/自定义控件/" rel="tag"># 自定义控件</a>
           
         </div>
       
@@ -421,8 +427,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/23/Android中Design库之TabLayout/" rel="next" title="Android中Design库之TabLayout">
-                <i class="fa fa-chevron-left"></i> Android中Design库之TabLayout
+              <a href="/2017/06/26/Android 控件架构与自定义控件（四）/" rel="next" title="Android 控件架构与自定义控件（四）">
+                <i class="fa fa-chevron-left"></i> Android 控件架构与自定义控件（四）
               </a>
             
           </div>
@@ -430,10 +436,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/06/26/研究：生女儿的父亲更平等、更大方、更长寿/" rel="prev" title="研究：生女儿的父亲更平等、更大方、更长寿">
-                研究：生女儿的父亲更平等、更大方、更长寿 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -480,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/avatar.gif"
@@ -595,6 +606,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-布局优化"><span class="nav-number">1.</span> <span class="nav-text">1.布局优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Android-UI-渲染机制"><span class="nav-number">1.0.1.</span> <span class="nav-text">(1) Android UI 渲染机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-避免过度绘制"><span class="nav-number">1.0.2.</span> <span class="nav-text">(2) 避免过度绘制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-优化布局层级"><span class="nav-number">1.0.3.</span> <span class="nav-text">(3) 优化布局层级</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-避免嵌套过多无用布局"><span class="nav-number">1.0.4.</span> <span class="nav-text">(4) 避免嵌套过多无用布局</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-使用Hierarchy-Viewer-观察布局层次"><span class="nav-number">1.0.5.</span> <span class="nav-text">(5) 使用Hierarchy Viewer 观察布局层次</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
