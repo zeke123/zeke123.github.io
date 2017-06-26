@@ -1,0 +1,874 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="自定义控件," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="keywords" content="自定义控件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 控件架构与自定义控件（一）">
+<meta property="og:url" content="http://yoursite.com/2017/06/22/Android 控件架构与自定义控件（一）/index.html">
+<meta property="og:site_name" content="周建的博客">
+<meta property="og:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta property="og:image" content="http://img.blog.csdn.net/20170609115015473?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:image" content="http://img.blog.csdn.net/20170609133235229?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-26T02:42:17.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 控件架构与自定义控件（一）">
+<meta name="twitter:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170609115015473?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/22/Android 控件架构与自定义控件（一）/"/>
+
+
+
+
+
+  <title>Android 控件架构与自定义控件（一） | 周建的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">周建的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">时间不会辜负每一个平静努力的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/22/Android 控件架构与自定义控件（一）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周建">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="周建的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android 控件架构与自定义控件（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-22T15:40:31+08:00">
+                2017-06-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android-群英传/" itemprop="url" rel="index">
+                    <span itemprop="name">Android 群英传</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><font color="gray" size="4"><strong>时间不会辜负每一个平静努力的人！</strong></font></center><br><center><font color="gray" size="4"><strong>欢迎来到周建的博客: 共同致力于技术分享与交流</strong></font></center>
+
+<a id="more"></a>
+<hr>
+<h2 id="一-Android-控件架构"><a href="#一-Android-控件架构" class="headerlink" title="一. Android 控件架构"></a>一. Android 控件架构</h2><p>Android中控件可以分为两类：<br>ViewGroup控件和View控件，ViewGroup控件作为父控件可以包含多个View控件，并管理其包含的View控件。通过ViewGroup，整个界面上的控件<br>形成了一个树形结构，上层控件负责下层子控件的测量和绘制，并传递交互事件。<br>findViewById( ) 方法就是在控件树中以树的深度优先遍历来查找对应的元素。在每棵控件树的顶部，都有一个ViewParent对象，这就是整棵树的控制核心，所有的交互管理事件都由它来统一调度和分配</p>
+<p><img src="http://img.blog.csdn.net/20170609115015473?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>每一个Activity都包含一个Window对象，在Android中Window对象由PhoneWindow来实现。PhoneWindow将一个DecorView设置为整个应用的根View。DecorView将要显示的具体内容显示在了PhoneWindow上，这里面所有View的监听事件，都通过WindowManagerService来进行接收，并通过Activity对象来回调相应的onClickListener。</p>
+<p>在显示上，它将屏幕分为两部分，一个是TitleView，另一个是ContentView。ContentView是一个ID为content的FrameLayout，activity_main.xml就是设置在这样一个FrameLayout里</p>
+<p><img src="http://img.blog.csdn.net/20170609133235229?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+<p>在代码中，当程序在onCreate() 方法中调用setContentView() 方法后，ActivityManagerService会调用onResume() 方法，此时系统才会把整个DecorView添加到PhoneWindow中，并显示出来，最终完成界面的绘制。</p>
+<h2 id="二-View的测量"><a href="#二-View的测量" class="headerlink" title="二 . View的测量"></a>二 . View的测量</h2><p>Android系统在绘制View前，必须先对View进行测量，这个过程在onMeasure() 方法中进行。</p>
+<p>通过MeasureSpec类来测量View。MeasureSpec是一个32位的int的值，其中高2位为测量模式，低30位为测量的大小，使用位运算符是为了提高并优化效率。</p>
+<p>测量模式分为三种：</p>
+<p>(1) EXACTLY</p>
+<p>精确值模式，当我们把控件的宽或者高指定为具体数值时，或者匹配父元素时，系统使用的就是 EXACTLY 模式</p>
+<p>(2) AT_MOST</p>
+<p>最大值模式，当控件的宽或者高位包裹内容时，控件大小一般随着控件的子控件或内容的变化而变化，此时控件的尺寸只要不超过父控件允许的最大尺寸即可</p>
+<p>(3) UNSPECIFIED</p>
+<p>View想多大就多大，通常情况下在绘制自定义View时才使用</p>
+<p>View类默认的onMeasure() 方法只支持EXACTLY模式，所以在自定义控件的时候不重写onMeasure() 方法的话，就只能使用EXACTLY模式。控件可以响应你指定的具体宽高值或者是匹配父元素的属性。如果要让自定义View支持包裹内容的属性，就必须重写onMeasure() 方法来指定wrap_content时的大小。</p>
+<p>通过MeasureSpec<br>这个来，就获得了View的测量模式和View要绘制的大小，我们就可以控制View的最后显示的大小。</p>
+<p>首先，重写onMeasure() 方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">@Override</div><div class="line">protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;</div><div class="line">super.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>系统最终会调用setMeasuredDimension方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">protected final void setMeasuredDimension(int measuredWidth, int measuredHeight) &#123;</div><div class="line">boolean optical = isLayoutModeOptical(this);</div><div class="line">if (optical != isLayoutModeOptical(mParent)) &#123;</div><div class="line">Insets insets = getOpticalInsets();</div><div class="line">int opticalWidth  = insets.left + insets.right;</div><div class="line">int opticalHeight = insets.top  + insets.bottom;</div><div class="line"></div><div class="line">measuredWidth  += optical ? opticalWidth  : -opticalWidth;</div><div class="line">measuredHeight += optical ? opticalHeight : -opticalHeight;</div><div class="line">&#125;</div><div class="line">setMeasuredDimensionRaw(measuredWidth, measuredHeight);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>将测量后的宽高值传进去，从而完成测量工作。所以在重写onMeasure() 方法后，最终要做的工作就是把测量后的宽高值作为参数传递给 setMeasuredDimension() 方法</p>
+<p>通过上面分析，重写onMeasure()方法代码如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* 重写onMeasure方法</div><div class="line">* @param widthMeasureSpec</div><div class="line">* @param heightMeasureSpec</div><div class="line">*/</div><div class="line">@Override</div><div class="line">protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) &#123;</div><div class="line">super.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line">setMeasuredDimension(measureWidth(widthMeasureSpec), measureHeight(heightMeasureSpec));</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在onMeasure方法中，我们调用自定义的measureWidth()方法和measureHeight() 方法，分别对宽高进行重新定义，参数则是宽和高的MeasureSpec对象，MeasureSpec对象包含了测量模式和侧量值的大小。</p>
+<p>下面我们就以measureWidth() 方法为例</p>
+<p>第一步，从MeasureSpec对象中提取出具体的测量模式和大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">//测量模式</div><div class="line">int spaceMode =  MeasureSpec.getMode(widthMeasureSpec);</div><div class="line">//测量大小</div><div class="line">int spaceSize = MeasureSpec.getSize(widthMeasureSpec);</div></pre></td></tr></table></figure>
+<p>接下来，通过判断测量模式，给出不同的测量值。当spaceMode为EXACTLY时，直接使用指定的spaceSize即可；当spaceMode为其他两种模式时，需要给它一个默认的大小。如果指定wrap_content属性，即AT_MOST模式，则需要取出我们指定的大小与spaceSize中最小的一个最为最后的测量值，measureWidth() 方法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">* 测量宽</div><div class="line">* @param widthMeasureSpec</div><div class="line">* @return</div><div class="line">*/</div><div class="line"></div><div class="line">private int measureWidth(int widthMeasureSpec)</div><div class="line">&#123;</div><div class="line">int result = 0;</div><div class="line">//测量模式</div><div class="line">int spaceMode =  MeasureSpec.getMode(widthMeasureSpec);</div><div class="line">//测量大小</div><div class="line">int spaceSize = MeasureSpec.getSize(widthMeasureSpec);</div><div class="line"></div><div class="line">if(spaceMode== MeasureSpec.EXACTLY)&#123;</div><div class="line">result = spaceSize;</div><div class="line">&#125;else &#123;</div><div class="line">result = 200;</div><div class="line">if(spaceMode== MeasureSpec.AT_MOST)&#123;</div><div class="line">result = Math.min(result,spaceSize);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>measureHeight() 方法和measureWidth() 方法基本一致</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">/**</div><div class="line">* 测量高</div><div class="line">* @param heightMeasureSpec</div><div class="line">* @return</div><div class="line">*/</div><div class="line"></div><div class="line">private int measureHeight(int heightMeasureSpec)</div><div class="line">&#123;</div><div class="line"></div><div class="line">int result = 0;</div><div class="line">//测量模式</div><div class="line">int spaceMode =  MeasureSpec.getMode(heightMeasureSpec);</div><div class="line">//测量大小</div><div class="line">int spaceSize = MeasureSpec.getSize(heightMeasureSpec);</div><div class="line">if(spaceMode== MeasureSpec.EXACTLY)&#123;</div><div class="line">result = spaceSize;</div><div class="line">&#125;</div><div class="line">else &#123;</div><div class="line">result = 200;</div><div class="line">if(spaceMode== MeasureSpec.AT_MOST)&#123;</div><div class="line">result = Math.min(result,spaceSize);</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">return result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="三-View的绘制"><a href="#三-View的绘制" class="headerlink" title="三 . View的绘制"></a>三 . View的绘制</h2><p>当测量好View之后，我们就可以简单地重写onDraw() 方法，并在Canvas对象上来绘制所需要的图形。</p>
+<p>要想在Android的界面中绘制相应的图像，就必须在Canvas上进行绘制。Canvas就是一个画板，使用Paint就可以在上面作画了。</p>
+<p>一般情况下，可以使用重写View类中的onDraw() 方法来绘图，onDraw() 中有一个参数，就是Canvas对象。使用这个Canvas对象就可以绘图了，而在其他地方，通常需要使用代码创建一个Canvas对象，代码如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Canvas canvas = new Canvas(bitmap);</div></pre></td></tr></table></figure>
+<p>当创建一个Canvas对象时，为什么要传进去一个bitmap对象呢？如果不传入一个bitmap对象，IDE编译虽然不会报错，但是一般我们不会这样做。这是因为传进去的bitmap与通过这个bitmap创建的Canvas画布紧紧联系在一起的，这个过程我们称之为装载画布。这个bitmap用来存储所用绘制在Canvas上的像素信息。所以当你通过这种方式创建了Canvas后，后面所用的Canvas.drawXXX方法都发生在这个bitmap上。如果在view类的onDraw() 方法中，通过下面这段代码，我们可以了解到 canvas与bitmap直接的关系。首先在onDraw方法中绘制两个bitmap，代码如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">canvas.drawBitmap(bitmap1,0,0,null);</div><div class="line">canvas.drawBitmap(bitmap2,0,0,null);</div></pre></td></tr></table></figure>
+<p>而对于bitmap2，我们将它装载到另一个Canvas对象中，代码如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Canvas mCanvas = new Canvas(bitmap2);</div></pre></td></tr></table></figure>
+<p>在其他地方使用Canvas对象的绘制方法在装载bitmap2的Canvas对象上进行绘图，代码如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">mCanvas.drawXXX</div></pre></td></tr></table></figure>
+<p>通过mCanvas将绘制效果作用在了bitmap2上，再刷新View的时候，就会发现通过onDraw(） 方法画出来的bitmap2已经发生了变化，这就是因为bitmap2 继承了在mCanvas上所进行的绘图操作</p>
+<h2 id="四-ViewGroup的测量"><a href="#四-ViewGroup的测量" class="headerlink" title="四 . ViewGroup的测量"></a>四 . ViewGroup的测量</h2><p>ViewGroup会去管理其子View，其中一个管理项目就是负责子View的显示大小。当ViewGroup的大小为wrap_content时，ViewGroup就需要对子View进行遍历，以便获得所有子View的大小，从而决定自己的大小。而在其他模式下则会通过具体的指定值来设置自身的大小。</p>
+<p>ViewGroup在测量时通过遍历所有子View，从而调用子View的Measure方法来获得每一个子View的测量结果。</p>
+<p>当View测量完毕后，就需要将子View放到合适的位置，这个过程就是Layout的过程。ViewGroup在执行Layout过程时，同样是使用遍历来调用子View 的Layout方法，并指定其具体的位置，从而来决定其布局位置。</p>
+<p>在自定义ViewGroup时，通常会去重写onLayout() 方法来控制子View显示位置的逻辑。同样，如果需要支持wrap_content属性，那么还必须重写onMeasure() 方法，这点与View是相同的。</p>
+<h2 id="五-ViewGroup的绘制"><a href="#五-ViewGroup的绘制" class="headerlink" title="五 . ViewGroup的绘制"></a>五 . ViewGroup的绘制</h2><p>ViewGroup通常情况下不需要绘制，因为它本身没有需要绘制的东西，如果不是指定了ViewGroup的背景颜色，那么ViewGroup的onDraw() 方法都不会被调用。但是，ViewGroup会使用dispatchDraw() 方法来绘制子View，其过程同样是通过遍历子View，并调用子View的绘制方法来完成绘制工作。</p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205020" target="_blank" rel="external">Android 控件架构与自定义控件(一)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205426" target="_blank" rel="external">Android 控件架构与自定义控件(二)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73205720" target="_blank" rel="external">Android 控件架构与自定义控件(三)</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/73368519" target="_blank" rel="external">Android 控件架构与自定义控件(四)</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/自定义控件/" rel="tag"># 自定义控件</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/22/写给女儿的一封信/" rel="next" title="写给女儿的一封信">
+                <i class="fa fa-chevron-left"></i> 写给女儿的一封信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/22/Android 控件架构与自定义控件（二）/" rel="prev" title="Android 控件架构与自定义控件（二）">
+                Android 控件架构与自定义控件（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="周建" />
+          <p class="site-author-name" itemprop="name">周建</p>
+           
+              <p class="site-description motion-element" itemprop="description">Give so much time to improving yourself that you won’t have time to criticize others.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zeke123" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/002601150b0b" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u014005316" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://juejin.im/user/5740329671cfe4006c391e1d" target="_blank" title="掘金">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  掘金
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://stormzhang.com/" title="stormzhang的博客" target="_blank">stormzhang的博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-Android-控件架构"><span class="nav-number">1.</span> <span class="nav-text">一. Android 控件架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-View的测量"><span class="nav-number">2.</span> <span class="nav-text">二 . View的测量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-View的绘制"><span class="nav-number">3.</span> <span class="nav-text">三 . View的绘制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-ViewGroup的测量"><span class="nav-number">4.</span> <span class="nav-text">四 . ViewGroup的测量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-ViewGroup的绘制"><span class="nav-number">5.</span> <span class="nav-text">五 . ViewGroup的绘制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">周建</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访问客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
