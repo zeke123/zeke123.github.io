@@ -1,0 +1,919 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Gradle打包," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="keywords" content="Gradle打包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gradle多渠道打包">
+<meta property="og:url" content="http://yoursite.com/2017/06/30/Gradle多渠道打包/index.html">
+<meta property="og:site_name" content="周建的博客">
+<meta property="og:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-1f6a667a12161c0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-337d947864751ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-ae35c485a325bc22.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-eddf9fa95cc31402.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-d96b967cfdc3636b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-1ce24c8be22307e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/2965516-64ae9f3ecf2bec73.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2017-06-29T23:08:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gradle多渠道打包">
+<meta name="twitter:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/2965516-1f6a667a12161c0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/30/Gradle多渠道打包/"/>
+
+
+
+
+
+  <title>Gradle多渠道打包 | 周建的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">周建的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">时间不会辜负每一个平静努力的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/30/Gradle多渠道打包/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周建">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="周建的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Gradle多渠道打包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-30T07:05:31+08:00">
+                2017-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Gradle多渠道打包/" itemprop="url" rel="index">
+                    <span itemprop="name">Gradle多渠道打包</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><font color="gray" size="4"><strong>时间不会辜负每一个平静努力的人！</strong></font></center><br><center><font color="gray" size="4"><strong>欢迎来到周建的博客: 共同致力于技术分享与交流</strong></font></center>
+
+<a id="more"></a>
+<hr>
+<h2 id="配置Gradle环境变量"><a href="#配置Gradle环境变量" class="headerlink" title="配置Gradle环境变量"></a>配置Gradle环境变量</h2><p>如何配置Gradle环境变量，请参考我的另一篇博客：</p>
+<p><a href="http://www.jianshu.com/p/6b2fc4f16e24" target="_blank" rel="external">Mac下配置Gradle环境变量</a><br>Windows用户配置Gradle环境变量应该也差不多，在这里就不介绍了</p>
+<p>如果电脑上不单独配置Gradle环境也没关系，因为Android Studio使用了Gradle Wrapper，它可以在没有配置Gradle环境变量的情况下构建项目</p>
+<h2 id="Gradle-Wrapper"><a href="#Gradle-Wrapper" class="headerlink" title="Gradle Wrapper"></a>Gradle Wrapper</h2><ul>
+<li><p>Gradle Wrapper是什么？<br>可以理解为对Gradle的一层封装，使用它可以在没有安装Gradle的系统上使用Gradle来构建项目</p>
+</li>
+<li><p>如何做到的？<br>Gradle Wrapper通过两个脚本文件实现这一功能,一个是用于windows的批处理文件gradlew.bat,一个是用于Linux和Uninx的Shell脚本文件gradlew.</p>
+</li>
+</ul>
+<p>使用Android Studio创建的项目默认为我们生成了Gradle Wrapper的文件结构.</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-1f6a667a12161c0d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="a.png"></p>
+<p>在gradle/wrapper目录下有两个文件: gradle-wrapper.jar和gradle-wrapper.properties</p>
+<p>gralde-wrapper.properties文件中声明了gradle的版本和下载地址.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">#Mon Dec 28 10:00:20 PST 2015</div><div class="line">distributionBase=GRADLE_USER_HOME</div><div class="line">distributionPath=wrapper/dists</div><div class="line">zipStoreBase=GRADLE_USER_HOME</div><div class="line">zipStorePath=wrapper/dists</div><div class="line">distributionUrl=https\://services.gradle.org/distributions/gradle-2.14.1-all.zip</div></pre></td></tr></table></figure>
+<p>在第一次使用gradlew进行项目构建的时候,Gradle Wrapper会自动下载gralde-wrapper.properties指定的gradle版本.</p>
+<h2 id="初始化构建环境"><a href="#初始化构建环境" class="headerlink" title="初始化构建环境"></a>初始化构建环境</h2><p>在第一次使用gradlew进行项目构建的时候,会对构建环境进行初始化，会把Gradle的安装包、插件和相关依赖下载下来.</p>
+<p>在Terminal中输入命令,如下：<br>./gradlew clean</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-337d947864751ef4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="b.png"></p>
+<p>首次执行命令行会先去下载gradle安装包，过程可能会非常慢(耐心等待。。还是可以下载下来的)</p>
+<p>如果实在太慢，可以设置代理去翻墙</p>
+<h2 id="常用Gradle任务"><a href="#常用Gradle任务" class="headerlink" title="常用Gradle任务"></a>常用Gradle任务</h2><p>1.查看gradle版本<br>./gradlew -v</p>
+<p>2.编译并打出Debug版本的包.<br>./gradlew assembleDebug</p>
+<p>3.编译并打出Release版本的包.<br>./gradlew assembleRelease</p>
+<p>4.执行检查并编译打包，打出所有Release和Debug的包.<br>./gradlew build</p>
+<p>5.删除build目录，会把app下面的build目录删掉<br>./gradlew clean</p>
+<p>6.编译打包并安装Debug版本的包<br>./gradlew installDebug</p>
+<p>7.卸载Debug版本的包<br>./gradlew uninstallDebug</p>
+<p>8.使用-info查看任务详情<br>./gradlew uninstallDebug -info</p>
+<h2 id="Gradle多渠道打包"><a href="#Gradle多渠道打包" class="headerlink" title="Gradle多渠道打包"></a>Gradle多渠道打包</h2><p>在AndroidMainfest.xml配置相应的渠道</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&lt;meta-data android:value=&quot;UMENG_CHANNEL&quot;         </div><div class="line">     android:name=&quot;$&#123;UMENG_CHANNEL_VALUE&#125;&quot;/&gt;  &lt;!--动态更改渠道号--&gt;</div></pre></td></tr></table></figure>
+<p>在build.gradle中配置渠道信息和自动替换脚本</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">//多渠道打包</div><div class="line">  productFlavors &#123;</div><div class="line">      xiaomi &#123;&#125;</div><div class="line">      huawei &#123;&#125;</div><div class="line">      yingyongbao &#123;&#125;</div><div class="line">      wandoujia &#123;&#125;</div><div class="line">  &#125;</div><div class="line"></div><div class="line">  //自动替换清单文件中的渠道号</div><div class="line">  productFlavors.all &#123;</div><div class="line">      flavor -&gt; flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>默认配置</p>
+<p>所有渠道默认使用这一配置,如果渠道有特殊需求,可以在productFlavors对应的渠道号中单独配置.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">defaultConfig &#123;</div><div class="line">      applicationId &quot;com.zhoujian.buglydemo&quot;</div><div class="line">      minSdkVersion 11</div><div class="line">      targetSdkVersion 25</div><div class="line">      versionCode 1</div><div class="line">      versionName &quot;1.0&quot;</div><div class="line">      testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</div><div class="line">      multiDexEnabled true //突破应用方法数65535的限制</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>打包后自动修改apk的名字</p>
+<p>release包的命名格式为：产品名<em>版本号</em>渠道名.apk</p>
+<p>debug包的命名格式为：产品名_版本号-debug.apk</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">applicationVariants.all &#123; variant -&gt;</div><div class="line">        variant.outputs.each &#123; output -&gt;</div><div class="line">            def outputFile = output.outputFile</div><div class="line">            if (null != outputFile &amp;&amp; outputFile.name.endsWith(&apos;.apk&apos;)) &#123;</div><div class="line">                File outputDir = new File(outputFile.parent);</div><div class="line">                def baseName = PRODUCT_NAME + &quot;$&#123;defaultConfig.versionName&#125;&quot; + &quot;_&quot; + variant.productFlavors[0].name</div><div class="line">                def newApkName</div><div class="line">                if (variant.buildType.name.equals(&apos;release&apos;)) &#123;</div><div class="line">                    newApkName = baseName + &apos;.apk&apos;</div><div class="line">                &#125; else if (variant.buildType.name.equals(&apos;debug&apos;)) &#123;</div><div class="line">                    def debugName = PRODUCT_NAME + &quot;$&#123;defaultConfig.versionName&#125;&quot;</div><div class="line">                    newApkName = debugName + &quot;-debug.apk&quot;</div><div class="line">                &#125;</div><div class="line">                output.outputFile = new File(outputDir, newApkName)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h2 id="我的build-gradle的完整文件"><a href="#我的build-gradle的完整文件" class="headerlink" title="我的build.gradle的完整文件"></a>我的build.gradle的完整文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div></pre></td><td class="code"><pre><div class="line">apply plugin: &apos;com.android.application&apos;</div><div class="line"></div><div class="line">//产品名</div><div class="line">def PRODUCT_NAME = &quot;BuglyDemo&quot;</div><div class="line"></div><div class="line">android &#123;</div><div class="line"></div><div class="line">    //添加签名文件配置</div><div class="line">    signingConfigs &#123;</div><div class="line">        mysigns &#123;</div><div class="line">            keyAlias &apos;zjandroid&apos;</div><div class="line">            keyPassword &apos;123456&apos;</div><div class="line">            storeFile file(&apos;/Users/zhoujian/AndroidStudioProjects/BuglyDemo/zhoujian.jks&apos;)</div><div class="line">            //storeFile file(&apos;zhoujian.jks&apos;)</div><div class="line">            storePassword &apos;123456&apos;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    compileSdkVersion 25</div><div class="line">    buildToolsVersion &quot;25.0.2&quot;</div><div class="line"></div><div class="line">    defaultConfig &#123;</div><div class="line">        applicationId &quot;com.zhoujian.buglydemo&quot;</div><div class="line">        minSdkVersion 11</div><div class="line">        targetSdkVersion 25</div><div class="line">        versionCode 1</div><div class="line">        versionName &quot;1.0&quot;</div><div class="line">        testInstrumentationRunner &quot;android.support.test.runner.AndroidJUnitRunner&quot;</div><div class="line">        multiDexEnabled true //突破应用方法数65535的限制</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //多渠道打包</div><div class="line">    productFlavors &#123;</div><div class="line">        xiaomi &#123;&#125;</div><div class="line">        huawei &#123;&#125;</div><div class="line">        yingyongbao &#123;&#125;</div><div class="line">        wandoujia &#123;&#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    //自动替换清单文件中的渠道号</div><div class="line">    productFlavors.all &#123;</div><div class="line">        flavor -&gt; flavor.manifestPlaceholders = [UMENG_CHANNEL_VALUE: name]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line"></div><div class="line">    buildTypes &#123;</div><div class="line">        release &#123;</div><div class="line">            minifyEnabled false //是否启用混淆</div><div class="line">            proguardFiles getDefaultProguardFile(&apos;proguard-android.txt&apos;), &apos;proguard-rules.pro&apos;</div><div class="line">            debuggable false</div><div class="line">            jniDebuggable false</div><div class="line">            signingConfig signingConfigs.mysigns</div><div class="line">            renderscriptDebuggable false</div><div class="line">            minifyEnabled false</div><div class="line">            pseudoLocalesEnabled false</div><div class="line">            zipAlignEnabled true</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    applicationVariants.all &#123; variant -&gt;</div><div class="line">        variant.outputs.each &#123; output -&gt;</div><div class="line">            def outputFile = output.outputFile</div><div class="line">            if (null != outputFile &amp;&amp; outputFile.name.endsWith(&apos;.apk&apos;)) &#123;</div><div class="line">                File outputDir = new File(outputFile.parent);</div><div class="line">                def baseName = PRODUCT_NAME + &quot;$&#123;defaultConfig.versionName&#125;&quot; + &quot;_&quot; + variant.productFlavors[0].name</div><div class="line">                def newApkName</div><div class="line">                if (variant.buildType.name.equals(&apos;release&apos;)) &#123;</div><div class="line">                    newApkName = baseName + &apos;.apk&apos;</div><div class="line">                &#125; else if (variant.buildType.name.equals(&apos;debug&apos;)) &#123;</div><div class="line">                    def debugName = PRODUCT_NAME + &quot;$&#123;defaultConfig.versionName&#125;&quot;</div><div class="line">                    newApkName = debugName + &quot;-debug.apk&quot;</div><div class="line">                &#125;</div><div class="line">                output.outputFile = new File(outputDir, newApkName)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">dependencies &#123;</div><div class="line">    compile fileTree(include: [&apos;*.jar&apos;], dir: &apos;libs&apos;)</div><div class="line">    androidTestCompile(&apos;com.android.support.test.espresso:espresso-core:2.2.2&apos;, &#123;</div><div class="line">        exclude group: &apos;com.android.support&apos;, module: &apos;support-annotations&apos;</div><div class="line">    &#125;)</div><div class="line">    compile &apos;com.android.support:appcompat-v7:25.1.1&apos;</div><div class="line">    testCompile &apos;junit:junit:4.12&apos;</div><div class="line">    //添加友盟统计库依赖</div><div class="line">    compile &apos;com.umeng.analytics:analytics:latest.integration&apos;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="命令行打包"><a href="#命令行打包" class="headerlink" title="命令行打包"></a>命令行打包</h2><p>本文是以小米市场、华为市场、应用宝市场、豌豆荚市场为例</p>
+<ul>
+<li>打出debug包<br>./gradlew assembleDebug</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-ae35c485a325bc22.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="a.png"></p>
+<ul>
+<li>打出所有渠道的Release包<br>./gradlew assembleRelease</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-eddf9fa95cc31402.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="b.png"></p>
+<ul>
+<li>打出小米市场的Release包</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-d96b967cfdc3636b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="c.png"></p>
+<ul>
+<li>同理，如果要打出华为市场的Release包<br>./gradlew assembleHuaweiRelease</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-1ce24c8be22307e8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="d.png"></p>
+<ul>
+<li>同时打出豌豆荚市场的debug包和Release包<br>./gradlew assembleWandoujia</li>
+</ul>
+<p><img src="http://upload-images.jianshu.io/upload_images/2965516-64ae9f3ecf2bec73.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="e.png"></p>
+<h2 id="Gradle多渠道打包出现的问题"><a href="#Gradle多渠道打包出现的问题" class="headerlink" title="Gradle多渠道打包出现的问题"></a>Gradle多渠道打包出现的问题</h2><p>如果在打包过程中出现问题，请参考我的另外两篇博客，有可能也是您遇到的问题：</p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/55802650" target="_blank" rel="external">Gradle打包：Keystore not found for signing config</a></p>
+<p><a href="http://blog.csdn.net/u014005316/article/details/55802773" target="_blank" rel="external">Could not get unknown property ‘mysigns’ for SigningConfig container.</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gradle打包/" rel="tag"># Gradle打包</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/30/Mac下配置Gradle环境变量/" rel="next" title="Mac下配置Gradle环境变量">
+                <i class="fa fa-chevron-left"></i> Mac下配置Gradle环境变量
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="周建" />
+          <p class="site-author-name" itemprop="name">周建</p>
+           
+              <p class="site-description motion-element" itemprop="description">Give so much time to improving yourself that you won’t have time to criticize others.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zeke123" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/002601150b0b" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u014005316" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://juejin.im/user/5740329671cfe4006c391e1d" target="_blank" title="掘金">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  掘金
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              博客链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/jdsjlzx" title="一叶飘舟的博客" target="_blank">一叶飘舟的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791" title="鸿洋的博客" target="_blank">鸿洋的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/singwhatiwanna" title="任玉刚的博客" target="_blank">任玉刚的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/guolin_blog" title="郭霖的博客" target="_blank">郭霖的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.jcodecraeer.com/" title="泡在网上的日子" target="_blank">泡在网上的日子</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.jikedaohang.com/" title="极客导航" target="_blank">极客导航</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/eclipsexys" title="徐宜生的博客" target="_blank">徐宜生的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://p.codekk.com/" title="codeKK源码解析" target="_blank">codeKK源码解析</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://stormzhang.com/" title="stormzhang的博客" target="_blank">stormzhang的博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#配置Gradle环境变量"><span class="nav-number">1.</span> <span class="nav-text">配置Gradle环境变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle-Wrapper"><span class="nav-number">2.</span> <span class="nav-text">Gradle Wrapper</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化构建环境"><span class="nav-number">3.</span> <span class="nav-text">初始化构建环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#常用Gradle任务"><span class="nav-number">4.</span> <span class="nav-text">常用Gradle任务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle多渠道打包"><span class="nav-number">5.</span> <span class="nav-text">Gradle多渠道打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我的build-gradle的完整文件"><span class="nav-number">6.</span> <span class="nav-text">我的build.gradle的完整文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#命令行打包"><span class="nav-number">7.</span> <span class="nav-text">命令行打包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradle多渠道打包出现的问题"><span class="nav-number">8.</span> <span class="nav-text">Gradle多渠道打包出现的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">周建</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访问客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
