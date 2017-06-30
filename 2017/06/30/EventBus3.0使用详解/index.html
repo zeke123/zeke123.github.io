@@ -1,0 +1,869 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Android第三方库," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="keywords" content="Android第三方库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EventBus3.0使用详解">
+<meta property="og:url" content="http://yoursite.com/2017/06/30/EventBus3.0使用详解/index.html">
+<meta property="og:site_name" content="周建的博客">
+<meta property="og:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta property="og:image" content="http://img.blog.csdn.net/20170630174000490?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+<meta property="og:updated_time" content="2017-06-30T09:48:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="EventBus3.0使用详解">
+<meta name="twitter:description" content="时间不会辜负每一个平静努力的人！欢迎来到周建的博客: 共同致力于技术分享与交流">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20170630174000490?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/30/EventBus3.0使用详解/"/>
+
+
+
+
+
+  <title>EventBus3.0使用详解 | 周建的博客</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">周建的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">时间不会辜负每一个平静努力的人</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/30/EventBus3.0使用详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="周建">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="周建的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">EventBus3.0使用详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-30T17:46:13+08:00">
+                2017-06-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android第三方库/" itemprop="url" rel="index">
+                    <span itemprop="name">Android第三方库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="page-pv">本文总阅读量
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+            </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <center><font color="gray" size="4"><strong>时间不会辜负每一个平静努力的人！</strong></font></center><br><center><font color="gray" size="4"><strong>欢迎来到周建的博客: 共同致力于技术分享与交流</strong></font></center>
+
+<a id="more"></a>
+<hr>
+<h2 id="EventBus简述"><a href="#EventBus简述" class="headerlink" title="EventBus简述"></a>EventBus简述</h2><p>EventBus是一款针对Android 优化的发布/订阅总线。</p>
+<h2 id="EventBus优点："><a href="#EventBus优点：" class="headerlink" title="EventBus优点："></a>EventBus优点：</h2><p>EventBus简化了应用程序内各组件间、组件与后台线程间的通信。</p>
+<p>开销小，代码更优雅，将发送者和接受者完全解耦</p>
+<h2 id="EventBus三要素"><a href="#EventBus三要素" class="headerlink" title="EventBus三要素"></a>EventBus三要素</h2><ul>
+<li>Event：事件，可以是任意类型的对象</li>
+<li>Subscriber：事件订阅者，在EventBus3.0之前消息处理的方法只能限定于onEvent、onEventMainThread、onEventBackgroundThread和onEventAsync，他们代表了四种线程模型。在3.0之后，事件处理方法可以随便起名，但需要加一个注解@Subcribe，并且指定线程模型</li>
+<li>Publisher：事件发布者，可以在任意线程发送事件。可以自己实例化EventBus对象，但一般使用 EventBus.getDefault()就可以了。直接调用EventBus的post（Object）方法发送事件</li>
+</ul>
+<h2 id="EventBus3-0的四种线程模型-ThreadMode"><a href="#EventBus3-0的四种线程模型-ThreadMode" class="headerlink" title="EventBus3.0的四种线程模型-ThreadMode"></a>EventBus3.0的四种线程模型-ThreadMode</h2><ul>
+<li>POSTING(默认) ：如果使用事件处理函数指定了线程模型为POSTING，那么该事件在哪个线程中发布出来，事件处理函数就会在哪个线程中运行。也就是说发布事件和接受事件在同一个线程。在线程模型为POSTING的事件处理函数中尽量避免执行耗时操作，因为它会阻塞事件的传递</li>
+<li>MAIN:事件的处理会在UI线程中执行。事件处理时间不能太长，可能会引起ANR</li>
+<li>BACKGROUND：如果事件是在UI线程中发布出来的，那么该事件处理函数就会在子线程中运行，如果事件本来就是子线程中发布出来的，那么该事件处理函数直接在子线程中执行。在此事件处理函数中禁止进行UI更新操作。</li>
+<li>ASYNC：无论事件在哪个线程发布，该事件处理函数都会在新建的子线程中执行，此事件处理函数中禁止进行UI更新操作。</li>
+</ul>
+<h4 id="添加依赖库"><a href="#添加依赖库" class="headerlink" title="添加依赖库"></a>添加依赖库</h4><p>Android Studio 配置gradle：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">compile &apos;org.greenrobot:eventbus:3.0.0&apos;</div></pre></td></tr></table></figure>
+<h4 id="定义消息类"><a href="#定义消息类" class="headerlink" title="定义消息类"></a>定义消息类</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div></pre></td><td class="code"><pre><div class="line">package com.zhoujian.eventbus;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by zhoujian on 2017/6/30.</div><div class="line"> */</div><div class="line"></div><div class="line">public class EventMessage</div><div class="line">&#123;</div><div class="line"></div><div class="line">    private String name;</div><div class="line"></div><div class="line">    private String country;</div><div class="line"></div><div class="line">    private int age;</div><div class="line"></div><div class="line">    private String description;</div><div class="line"></div><div class="line"></div><div class="line">    public String getName() &#123;</div><div class="line">        return name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setName(String name) &#123;</div><div class="line">        this.name = name;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getCountry() &#123;</div><div class="line">        return country;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setCountry(String country) &#123;</div><div class="line">        this.country = country;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public int getAge() &#123;</div><div class="line">        return age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setAge(int age) &#123;</div><div class="line">        this.age = age;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public String getDescription() &#123;</div><div class="line">        return description;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setDescription(String description) &#123;</div><div class="line">        this.description = description;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public String toString() &#123;</div><div class="line">        return &quot;EventMessage&#123;&quot; +</div><div class="line">                &quot;name=&apos;&quot; + name + &apos;\&apos;&apos; +</div><div class="line">                &quot;, country=&apos;&quot; + country + &apos;\&apos;&apos; +</div><div class="line">                &quot;, age=&quot; + age +</div><div class="line">                &quot;, description=&apos;&quot; + description + &apos;\&apos;&apos; +</div><div class="line">                &apos;&#125;&apos;;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="注册和取消订阅事件"><a href="#注册和取消订阅事件" class="headerlink" title="注册和取消订阅事件"></a>注册和取消订阅事件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div></pre></td><td class="code"><pre><div class="line">package com.zhoujian.eventbus;</div><div class="line"></div><div class="line">import android.content.Intent;</div><div class="line">import android.os.Bundle;</div><div class="line">import android.support.v7.app.AppCompatActivity;</div><div class="line">import android.view.View;</div><div class="line">import android.widget.Button;</div><div class="line">import android.widget.TextView;</div><div class="line">import org.greenrobot.eventbus.EventBus;</div><div class="line">import org.greenrobot.eventbus.Subscribe;</div><div class="line">import org.greenrobot.eventbus.ThreadMode;</div><div class="line"></div><div class="line">public class MainActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line">    private Button mButton;</div><div class="line">    private TextView mText;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState)</div><div class="line">    &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_main);</div><div class="line"></div><div class="line">        //注册事件</div><div class="line">        EventBus.getDefault().register(this);</div><div class="line">        initView();</div><div class="line">        clickEvent();</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void initView()</div><div class="line">    &#123;</div><div class="line">        mButton = (Button) findViewById(R.id.sendEvent);</div><div class="line">        mText = (TextView) findViewById(R.id.text);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void clickEvent()</div><div class="line">    &#123;</div><div class="line"></div><div class="line">        mButton.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                Intent intent = new Intent(MainActivity.this,SecondActivity.class);</div><div class="line">                startActivity(intent);</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onDestroy() &#123;</div><div class="line">        super.onDestroy();</div><div class="line">        EventBus.getDefault().unregister(this);</div><div class="line">    &#125;</div><div class="line">    //事件订阅者处理事件</div><div class="line"></div><div class="line">    @Subscribe(threadMode = ThreadMode.MAIN)</div><div class="line">    public void onMotionEvent(EventMessage messageEvent)&#123;</div><div class="line">        mText.setText(</div><div class="line">                &quot;姓名：&quot;+messageEvent.getName()+&quot;\n&quot; +</div><div class="line">                        &quot;年龄：&quot;+messageEvent.getAge() +&quot;\n&quot;+</div><div class="line">                        &quot;国家：&quot;+messageEvent.getCountry() +&quot;\n&quot;+</div><div class="line">                        &quot;描述：&quot;+messageEvent.getDescription());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="事件发布者发布事件"><a href="#事件发布者发布事件" class="headerlink" title="事件发布者发布事件"></a>事件发布者发布事件</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line">package com.zhoujian.eventbus;</div><div class="line"></div><div class="line">import android.os.Bundle;</div><div class="line">import android.support.v7.app.AppCompatActivity;</div><div class="line">import android.view.View;</div><div class="line">import android.widget.Button;</div><div class="line"></div><div class="line">import org.greenrobot.eventbus.EventBus;</div><div class="line"></div><div class="line">/**</div><div class="line"> * Created by zhoujian on 2017/6/30.</div><div class="line"> */</div><div class="line"></div><div class="line">public class SecondActivity extends AppCompatActivity &#123;</div><div class="line"></div><div class="line">    private Button mButton;</div><div class="line">    private EventMessage message;</div><div class="line"></div><div class="line"></div><div class="line">    @Override</div><div class="line">    protected void onCreate(Bundle savedInstanceState)</div><div class="line">    &#123;</div><div class="line">        super.onCreate(savedInstanceState);</div><div class="line">        setContentView(R.layout.activity_second);</div><div class="line"></div><div class="line">        initMessage();</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">        mButton = (Button) findViewById(R.id.receiveEvent);</div><div class="line"></div><div class="line">        mButton.setOnClickListener(new View.OnClickListener() &#123;</div><div class="line">            @Override</div><div class="line">            public void onClick(View v) &#123;</div><div class="line">                EventBus.getDefault().post(message);</div><div class="line"></div><div class="line">                finish();</div><div class="line">            &#125;</div><div class="line">        &#125;);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    private void initMessage()</div><div class="line">    &#123;</div><div class="line">        message = new EventMessage();</div><div class="line"></div><div class="line">        message.setName(&quot;周建&quot;);</div><div class="line"></div><div class="line">        message.setAge(28);</div><div class="line"></div><div class="line">        message.setCountry(&quot;中国&quot;);</div><div class="line"></div><div class="line">        message.setDescription(&quot;一名来自北京朝阳区的程序员&quot;);</div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="运行截图"><a href="#运行截图" class="headerlink" title="运行截图"></a>运行截图</h4><p><img src="http://img.blog.csdn.net/20170630174000490?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvdTAxNDAwNTMxNg==/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast" alt="这里写图片描述"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android第三方库/" rel="tag"># Android第三方库</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/30/Could not get unknown property 'mysigns' for SigningConfig container/" rel="next" title="Could not get unknown property 'mysigns' for SigningConfig container">
+                <i class="fa fa-chevron-left"></i> Could not get unknown property 'mysigns' for SigningConfig container
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="周建" />
+          <p class="site-author-name" itemprop="name">周建</p>
+           
+              <p class="site-description motion-element" itemprop="description">Give so much time to improving yourself that you won’t have time to criticize others.</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/zeke123" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://www.jianshu.com/u/002601150b0b" target="_blank" title="简书">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  简书
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://blog.csdn.net/u014005316" target="_blank" title="CSDN">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  CSDN
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://juejin.im/user/5740329671cfe4006c391e1d" target="_blank" title="掘金">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  掘金
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              博客链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/jdsjlzx" title="一叶飘舟的博客" target="_blank">一叶飘舟的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/lmj623565791" title="鸿洋的博客" target="_blank">鸿洋的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/singwhatiwanna" title="任玉刚的博客" target="_blank">任玉刚的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/guolin_blog" title="郭霖的博客" target="_blank">郭霖的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.jcodecraeer.com/" title="泡在网上的日子" target="_blank">泡在网上的日子</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.jikedaohang.com/" title="极客导航" target="_blank">极客导航</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://blog.csdn.net/eclipsexys" title="徐宜生的博客" target="_blank">徐宜生的博客</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://p.codekk.com/" title="codeKK源码解析" target="_blank">codeKK源码解析</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://stormzhang.com/" title="stormzhang的博客" target="_blank">stormzhang的博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#EventBus简述"><span class="nav-number">1.</span> <span class="nav-text">EventBus简述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventBus优点："><span class="nav-number">2.</span> <span class="nav-text">EventBus优点：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventBus三要素"><span class="nav-number">3.</span> <span class="nav-text">EventBus三要素</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#EventBus3-0的四种线程模型-ThreadMode"><span class="nav-number">4.</span> <span class="nav-text">EventBus3.0的四种线程模型-ThreadMode</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#添加依赖库"><span class="nav-number">4.0.1.</span> <span class="nav-text">添加依赖库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#定义消息类"><span class="nav-number">4.0.2.</span> <span class="nav-text">定义消息类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注册和取消订阅事件"><span class="nav-number">4.0.3.</span> <span class="nav-text">注册和取消订阅事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件发布者发布事件"><span class="nav-number">4.0.4.</span> <span class="nav-text">事件发布者发布事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运行截图"><span class="nav-number">4.0.5.</span> <span class="nav-text">运行截图</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">周建</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+<div class="busuanzi-count">
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv">
+      本站访问客数
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+      人次
+    </span>
+  
+
+  
+    <span class="site-pv">
+      本站总访问量
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+      次
+    </span>
+  
+</div>
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
